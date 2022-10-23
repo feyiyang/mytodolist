@@ -13,6 +13,11 @@ export default {
   },
   data () {
     return {}
+  },
+  methods: {
+    done(index){
+      this.todos[index].status = 'done'
+    }
   }
 }
 </script>

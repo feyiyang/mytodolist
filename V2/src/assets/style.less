@@ -1,0 +1,82 @@
+@donecolor: #999;
+@lightblue: #529394;
+@bg-primary-accent: #faf9f8;
+@bg-border: #e1dfdd;
+.todo_wrap {
+  height: 100%;
+  color: #333;
+  padding: 1.5em 2em;
+  background-color: @bg-primary-accent;
+  .add_wrap{
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0px 0.3px 0.9px rgba(0,0,0,0.1),0px 1.6px 3.6px rgba(0,0,0,0.1);
+    .handlers{
+      padding: 10px;
+      border-top: solid 1px @bg-border;
+      text-align: right;
+      background-color: @bg-primary-accent;
+    }
+    .text{
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      .cir{
+        display: inline-block;
+        margin: 0 5px;
+        width: 12px;
+        height: 12px;
+        border: 1px @lightblue solid;
+        border-radius: 8px;
+      }
+      input{
+        width: 100%;
+        height: 44px;
+        border: 0px none;
+        border-radius: 4px;
+        padding: 0.2em 0.6em;
+        background: transparent;
+        transition: none;
+        box-sizing: border-box;
+      }
+    }
+  }
+  button {
+    cursor: pointer;
+    padding: 0 0.5em;
+  }
+  li{
+    opacity: 1;
+    transition: background-color .5s;
+    padding: 4px;
+    span{
+      display: inline-block;
+      vertical-align: middle;
+      height: 16px;
+      &.status{
+        position: relative;
+        width: 12px;
+        height: 12px;
+        margin-right: 4px;
+        border: 1px @lightblue solid;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+    }
+    &.done { 
+      color: @donecolor;
+      .status{
+        border-color: @donecolor;
+        background-color: #c0c0c0;
+        &::before{
+          content: ' ';
+          position: absolute;
+          left:2px;
+          top: 5px;
+          width: 10px;
+          border-bottom: 1px #e3e3e3 solid;
+        }
+      }
+    }
+  }
+}
