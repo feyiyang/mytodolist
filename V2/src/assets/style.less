@@ -45,22 +45,25 @@
     cursor: pointer;
     padding: 0 0.5em;
   }
-  li{
+  .todos li{
+    padding: 10px 15px;
+    border-radius: 4px;
     opacity: 1;
     transition: background-color .5s;
-    padding: 4px;
+    box-shadow: 0px 0.3px 0.9px rgba(0,0,0,0.1),0px 1.6px 3.6px rgba(0,0,0,0.1);
+    cursor: default;
     span{
-      display: inline-block;
-      vertical-align: middle;
-      height: 16px;
       &.status{
         position: relative;
         width: 12px;
         height: 12px;
-        margin-right: 4px;
+        margin-right: 16px;
         border: 1px @lightblue solid;
         border-radius: 8px;
         cursor: pointer;
+      }
+      &.type{
+        font-size: 12px;
       }
     }
     &.done { 

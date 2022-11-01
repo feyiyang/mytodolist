@@ -2,7 +2,7 @@
   <div class="add_wrap">
     <div class="text">
       <span class="cir"></span>
-      <input type="text" v-model="whatever">
+      <input v-model="whatever" type="text" placeholder="添加任务">
     </div>
     <div class="handlers">
       <button :disabled="!whatever" @click="add">添加</button>
@@ -26,3 +26,15 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+button {
+  height: 26px;
+  color: #2532a3;
+  font-weight: 600;
+  border: 1px #ccc solid;
+  background-color: #fff;
+  &:disabled {
+    color: #999;
+  }
+}
+</style>
