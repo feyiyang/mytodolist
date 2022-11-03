@@ -8,6 +8,18 @@
       </span>
     </li>
   </ul>
+  <template v-if="donelist.length">
+    <span class="donet">已完成◿</span>
+    <ul class="todos done">
+      <li v-for="(item, index) in donelist" :key="index" :class="item.status">
+        <span class="status"></span>
+        <span class="content">
+          {{item.content}}
+          <span class="type">任务</span>
+        </span>
+      </li>
+    </ul>
+  </template>
 </template>
 <script>
 export default {
@@ -15,11 +27,15 @@ export default {
     todos: Array
   },
   data () {
-    return {}
+    return {
+      donelist: []
+    }
   },
   methods: {
     done(index){
       this.todos[index].status = 'done'
+      const item = JSON.parse(JSON.stringify(this.todos.splice(index, 1)))
+      this.donelist = this.donelist.concat(item)
     }
   }
 }

@@ -2,10 +2,10 @@
   <div class="add_wrap">
     <div class="text">
       <span class="cir"></span>
-      <input v-model="whatever" type="text" placeholder="添加任务">
+      <input v-model="content" type="text" placeholder="添加任务">
     </div>
     <div class="handlers">
-      <button :disabled="!whatever" @click="add">添加</button>
+      <button :disabled="!content" @click="add">添加</button>
     </div>
   </div>
 </template>
@@ -13,15 +13,15 @@
 export default {
   data () {
     return {
-      whatever: ''
+      content: ''
     }
   },
   emits: ['add'],
   methods: {
-    add (e) {
-      if (!this.whatever) return
-      this.$emit('add', { content: this.whatever, status: 'will' })
-      this.whatever = ''
+    add () {
+      if (!this.content) return
+      this.$emit('add', { content: this.content, status: 'will' })
+      this.content = ''
     },
   }
 }

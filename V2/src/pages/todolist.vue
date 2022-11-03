@@ -28,9 +28,8 @@ export default {
     this.aday = dateFormat(new Date(), 'MM月dd号 w')
   },
   methods: {
-    addHandler (wt) {
-      console.log(wt)
-      this.todos.push(wt)
+    addHandler (doitem) {
+      this.todos.push(doitem)
     }
   }
 }
