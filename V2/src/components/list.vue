@@ -1,10 +1,10 @@
 <template>
   <ul class="todos">
     <li v-for="(item, index) in todos" :key="index" :class="item.status">
-      <span class="status" @click="done(index)"></span>
+      <span class="status" title="点击完成" @click="done(index)"></span>
       <span class="content">
         {{item.content}}
-        <span class="type">任务</span>
+        <span class="type">任务<i :class="'lev_' + item.level"></i></span>
       </span>
     </li>
   </ul>
@@ -33,25 +33,14 @@ export default {
   },
   methods: {
     done(index){
-      this.todos[index].status = 'done'
+      this.todos[index].status = 'init'
       const item = JSON.parse(JSON.stringify(this.todos.splice(index, 1)))
+      const len = this.donelist.length
       this.donelist = this.donelist.concat(item)
+      setTimeout(() => {
+        this.donelist[len].status = 'done'
+      }, 40)
     }
   }
 }
 </script>
-<style lang="less" scoped>
-.todos{
-  padding: 15px 0;
-  li {
-    display: flex;
-    align-items: center;
-    padding: 10px 8px;
-    background-color: #fff;
-    .content{
-      display: flex;
-      flex-flow: column;
-    }
-  }
-}
-</style>

@@ -2,19 +2,45 @@
 @lightblue: #529394;
 @bg-primary-accent: #faf9f8;
 @bg-border: #e1dfdd;
+.small_shandow {
+  box-shadow: 0px 0.1px 0.7px rgba(0,0,0,0.1),0px 1px 3px rgba(0,0,0,0.1);
+}
+.pre_circle {
+  width: 14px;
+  height: 14px;
+  border: 1px @lightblue solid;
+  border-radius: 8px;
+}
 .todo_wrap {
   height: 100%;
   color: #333;
   padding: 1.5em 2em;
   background-color: @bg-primary-accent;
+  .seven{
+    position: absolute;
+    right: 2em;
+    top: 0;
+    width: 36px;
+  }
+  .aday{
+    padding-bottom: 15px;
+    h4{
+      font-size: 18px;
+    }
+    p{
+      font-size: 12px;
+      color: #797979;
+    }
+  }
   .add_wrap{
     border-radius: 4px;
     background-color: #fff;
-    box-shadow: 0px 0.3px 0.9px rgba(0,0,0,0.1),0px 1.6px 3.6px rgba(0,0,0,0.1);
+    .small_shandow();
     .handlers{
+      display: flex;
+      justify-content: space-between;
       padding: 10px;
       border-top: solid 1px @bg-border;
-      text-align: right;
       background-color: @bg-primary-accent;
     }
     .text{
@@ -24,14 +50,11 @@
       .cir{
         display: inline-block;
         margin: 0 5px;
-        width: 12px;
-        height: 12px;
-        border: 1px @lightblue solid;
-        border-radius: 8px;
+        .pre_circle();
       }
       input{
         width: 100%;
-        height: 44px;
+        height: 50px;
         border: 0px none;
         border-radius: 4px;
         padding: 0.2em 0.6em;
@@ -45,39 +68,78 @@
     cursor: pointer;
     padding: 0 0.5em;
   }
-  .todos li{
-    padding: 10px 15px;
-    border-radius: 4px;
-    opacity: 1;
-    transition: all .5s;
-    box-shadow: 0px 0.3px 0.9px rgba(0,0,0,0.1),0px 1.6px 3.6px rgba(0,0,0,0.1);
-    cursor: default;
-    span{
-      &.status{
-        position: relative;
-        width: 12px;
-        height: 12px;
-        margin-right: 16px;
-        border: 1px @lightblue solid;
-        border-radius: 8px;
-        cursor: pointer;
+  .todos{
+    padding: 20px 0;
+    li{
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      border-radius: 4px;
+      transition: all 0.2s ease-in-out;
+      .small_shandow();
+      cursor: default;
+      margin-bottom: 10px;
+      &.init{
+        height: 0;
+        padding: 0 15px;
+        overflow: hidden;
+        opacity: 0.4;
       }
-      &.type{
-        font-size: 12px;
+      &.will{
+        height: auto;
+        padding: 10px 15px;
+        opacity: 1;
       }
-    }
-    &.done { 
-      color: @donecolor;
-      .status{
-        border-color: @donecolor;
-        background-color: #c0c0c0;
-        &::before{
-          content: ' ';
-          position: absolute;
-          left:2px;
-          top: 5px;
-          width: 10px;
-          border-bottom: 1px #e3e3e3 solid;
+      .content{
+        display: flex;
+        flex-flow: column;
+        min-height: 32px;
+      }
+      span{
+        &.status{
+          position: relative;
+          .pre_circle();
+          margin-right: 16px;
+          cursor: pointer;
+        }
+        &.type{
+          display: inline-block;
+          height: 12px;
+          overflow: hidden;
+          margin-top: 6px;
+          font-size: 12px;
+          line-height: 12px;
+          color: #909499;
+          i{
+            display: inline-block;
+            width: 2px;
+            height: 11px;
+            vertical-align: middle;
+            margin-left: 6px;
+            transform: skewX(-10deg);
+            &.lev{
+              &_1{
+                background-color: #b0b0cc;
+              }
+            }
+          }
+        }
+      }
+      &.done { 
+        color: @donecolor;
+        height: auto;
+        padding: 10px 15px;
+        .status{
+          border-color: @donecolor;
+          background-color: #c0c0c0;
+          &::before{
+            content: ' ';
+            position: absolute;
+            left:2px;
+            top: 5px;
+            width: 10px;
+            border-bottom: 1px #e3e3e3 solid;
+          }
         }
       }
     }

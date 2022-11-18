@@ -1,11 +1,15 @@
 <template>
   <div class="todo_wrap">
+    <img class="seven" src="../assets/seven.svg" alt="">
     <div class="aday" v-once>
       <h4>我的一天</h4>
       <p>{{aday}}</p>
     </div>
     <Add @add="addHandler"></Add>
     <List :todos="todos"></List>
+    <div class="rightbar">
+      <strong>{{taskDet.title}}</strong>
+    </div>
   </div>
 </template>
 <script>
@@ -21,7 +25,10 @@ export default {
   data () {
     return {
       todos: [],
-      aday: ''
+      taskDet: {
+        title: ''
+      },
+      aday: '',  // 我的一天
     }
   },
   created () {
@@ -29,20 +36,12 @@ export default {
   },
   methods: {
     addHandler (doitem) {
-      this.todos.push(doitem)
+      const len = this.todos.length
+      this.todos.push({ content: doitem, status: 'init', level: 1, times: '' })
+      setTimeout(() => {
+        this.todos[len].status = 'will'
+      }, 60)
     }
   }
 }
 </script>
-<style lang="less" scoped>
-.aday{
-  padding-bottom: 15px;
-  h4{
-    font-size: 18px;
-  }
-  p{
-    font-size: 12px;
-    color: #797979;
-  }
-}
-</style>
