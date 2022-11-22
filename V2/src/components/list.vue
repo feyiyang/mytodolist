@@ -4,19 +4,21 @@
       <span class="status" title="点击完成" @click="done(index)"></span>
       <span class="content">
         {{item.content}}
-        <span class="type">任务<i :class="'lev_' + item.level"></i></span>
+        <span class="type">{{item.times}}</span>
       </span>
+      <span :class="'lev lev_' + item.level"><i class="lefti"></i><i class="righti"></i></span>
     </li>
   </ul>
   <template v-if="donelist.length">
     <span class="donet">已完成◿</span>
-    <ul class="todos done">
+    <ul class="todos donels">
       <li v-for="(item, index) in donelist" :key="index" :class="item.status">
         <span class="status"></span>
         <span class="content">
           {{item.content}}
-          <span class="type">任务</span>
+          <span class="type">{{item.times}}</span>
         </span>
+        <span :class="'lev lev_' + item.level"><i class="lefti"></i><i class="righti"></i></span>
       </li>
     </ul>
   </template>
@@ -34,12 +36,14 @@ export default {
   methods: {
     done(index){
       this.todos[index].status = 'init'
-      const item = JSON.parse(JSON.stringify(this.todos.splice(index, 1)))
-      const len = this.donelist.length
-      this.donelist = this.donelist.concat(item)
       setTimeout(() => {
-        this.donelist[len].status = 'done'
-      }, 40)
+        const item = JSON.parse(JSON.stringify(this.todos.splice(index, 1)))
+        this.donelist = this.donelist.concat(item)
+      }, 400)
+      setTimeout(() => { 
+        const len = this.donelist.length
+        this.donelist[len - 1].status = 'done'
+      }, 450)
     }
   }
 }

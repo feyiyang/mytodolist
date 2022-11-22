@@ -35,12 +35,17 @@ export default {
     this.aday = dateFormat(new Date(), 'MM月dd号 w')
   },
   methods: {
-    addHandler (doitem) {
+    addHandler ({ content, level, ...when }) {
       const len = this.todos.length
-      this.todos.push({ content: doitem, status: 'init', level: 1, times: '' })
+      this.todos.push({ 
+        content: content, 
+        status: 'newt', 
+        level: level.lev, 
+        times: (when.week && when.week.v || '') + when.hm
+      })
       setTimeout(() => {
         this.todos[len].status = 'will'
-      }, 60)
+      }, 50)
     }
   }
 }
