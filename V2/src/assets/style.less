@@ -223,10 +223,10 @@
             i::after, &::after { background-color: @l4; }
           }
           &_3{
-            i::after { background-color: @l3; }
+            i::after, &::after { background-color: @l3; }
           }
           &_2{
-            i::after { background-color: @l2; }
+            i::after, &::after { background-color: @l2; }
           }
           &_1{
             i::after, &::after { background-color: @l1; }
@@ -257,19 +257,19 @@
     }
     li span.lev{
       opacity: .4;
-      right: 670px;
+      right: 720px;
       bottom: 8px;
       transform: rotate(90deg);
-      transition:all 1s linear;
+      transition:all 0.8s ease-out;
     }
     .lev::after{
       content: ' ';
       position: absolute;
       left: 5px;
       top: 40px;
-      width: 1px;
-      height: 6px;
-      transition: all 1.6s linear;
+      width: 1.3px;
+      height: 186px;
+      transition: all 1.2s linear;
     }
     .done .lev {
       right: 0;

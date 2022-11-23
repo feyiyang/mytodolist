@@ -19,7 +19,7 @@
         </ul>
       </div>
       <div class="level">
-        <span class="btn" @click="(e) => { showPopHdl(e, 'showLevels') }">要次&nbsp;·&nbsp;</span>
+        <span class="btn" @click="setLev()">要次&nbsp;·&nbsp;</span>
         <span class="" @click="(e) => { showPopHdl(e, 'showLevels') }">{{selLev.v}}</span>
         <ul v-if="showLevels" class="popover levels">
           <li v-for="(item, index) in levels" :key="index" :class="'lev_' + item.lev" @click="setLev(item)">
@@ -107,7 +107,12 @@ export default {
     },
     setLev (itm) {
       this.showLevels = false
-      this.selLev = itm
+      if (!itm) {
+        this.selLev = this.levels[this.selLev.lev - 1 < 1 ? 3 : (this.selLev.lev - 2)]
+      } else {
+        this.selLev = itm
+      }
+      
     }
   }
 }

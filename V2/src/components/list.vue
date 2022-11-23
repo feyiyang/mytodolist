@@ -13,7 +13,7 @@
     <span class="donet">已完成◿</span>
     <ul class="todos donels">
       <li v-for="(item, index) in donelist" :key="index" :class="item.status">
-        <span class="status"></span>
+        <span class="status" @click="delDone(index)"></span>
         <span class="content">
           {{item.content}}
           <span class="type">{{item.times}}</span>
@@ -44,6 +44,9 @@ export default {
         const len = this.donelist.length
         this.donelist[len - 1].status = 'done'
       }, 450)
+    },
+    delDone (index) {
+      this.donelist.splice(index, 1)
     }
   }
 }
