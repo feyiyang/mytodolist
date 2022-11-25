@@ -1,0 +1,281 @@
+@donecolor: #999;
+@lightblue: #529394;
+@bg-primary-accent: #faf9f8;
+@bg-border: #e1dfdd;
+@l1: #e04848;
+@l2: #e9b554;
+@l3: #0c0caa;
+@l4: #d0d0f3;
+.small_shandow {
+  box-shadow: 0px 0.1px 0.7px rgba(0,0,0,0.1),0px 1px 3px rgba(0,0,0,0.1);
+}
+.pre_circle {
+  width: 14px;
+  height: 14px;
+  border: 1px @lightblue solid;
+  border-radius: 8px;
+}
+
+// 👆变量...  👇内容样式...
+
+.todo_wrap {
+  height: 100%;
+  color: #333;
+  padding: 1.5em 2em;
+  background-color: @bg-primary-accent;
+  .seven{
+    position: absolute;
+    right: 2em;
+    top: 0;
+    width: 36px;
+  }
+  .aday{
+    padding-bottom: 15px;
+    h4{
+      font-size: 18px;
+    }
+    p{
+      font-size: 12px;
+      color: #797979;
+    }
+  }
+  .add_wrap{
+    border-radius: 4px;
+    background-color: #fff;
+    .small_shandow();
+    .handlers{
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-top: solid 1px @bg-border;
+      background-color: @bg-primary-accent;
+      color: @lightblue;
+      ul.popover {
+        position: absolute;
+        left: 40px;
+        top: 24px;
+        z-index: 3;
+        width: 56px;
+        padding: 0 7px 4px;
+        text-align: center;
+        background-color: #fff;
+        .small_shandow();
+        li {
+          margin: 4px 2px;
+          height: 24px;
+          line-height: 24px;
+          color: #666;
+          border-bottom: 1px #d2d7dd solid;
+          cursor: pointer;
+          &:hover{
+            color: #909599;
+          }
+          &:last-of-type{
+            border: none;
+          }
+        }
+      }
+      .level{
+        flex: 1;
+        position: relative;
+        span{
+          cursor: pointer;
+        }
+        .levels {
+          position: absolute;
+        }
+      }
+      .times {
+        position: relative;
+        width: 180px;
+        &:hover .timesls {
+          display: block;
+        }
+        .come {
+          display: flex;
+          align-items: center;
+          width: 140px;
+          line-height: 18px;
+          cursor: pointer;
+          white-space: nowrap;
+          input{
+            width: 110px;
+            height: 18px;
+            text-indent: 4px;
+            background: #fff;
+            border: none;
+            border-radius: 2px;
+            color: @lightblue;
+            &.short {
+              width: 44px;
+            }
+          }
+        }
+      }
+    }
+    .text{
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      .cir{
+        display: inline-block;
+        margin: 0 5px;
+        .pre_circle();
+      }
+      input{
+        width: 100%;
+        height: 50px;
+        border: 0px none;
+        border-radius: 4px;
+        padding: 0.2em 0.6em;
+        background: transparent;
+        transition: none;
+        box-sizing: border-box;
+      }
+    }
+  }
+  button {
+    cursor: pointer;
+    padding: 0 0.5em;
+  }
+  .todos{
+    padding: 20px 0;
+    li{
+      position: relative;
+      padding: 0 15px;
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      border-radius: 4px;
+      transition: all 0.3s linear;
+      .small_shandow();
+      cursor: default;
+      margin-bottom: 10px;
+      &.init{
+        margin: 0;
+        height: 0;
+        padding: 0 15px;
+        overflow: hidden;
+        opacity: 0.6;
+      }
+      &.will{
+        height: auto;
+        padding: 10px 15px;
+        opacity: 1;
+        transition: none;
+      }
+      .content{
+        display: flex;
+        flex-flow: column;
+        flex: 1;
+        min-height: 32px;
+      }
+      span{
+        &.status{
+          position: relative;
+          .pre_circle();
+          margin-right: 16px;
+          cursor: pointer;
+        }
+        &.type{
+          display: inline-block;
+          height: 12px;
+          overflow: hidden;
+          margin-top: 6px;
+          font-size: 12px;
+          line-height: 12px;
+          color: #909499;
+        }
+        &.lev{
+          position: absolute;
+          right: -6px;
+          bottom: 0;
+          width: 12px;
+          height: 38px;
+          transition: all .3s ease-out;
+          i {
+            display: inline-block;
+            width: 6px;
+            height: 38px;
+            overflow: hidden;
+          }
+          i.lefti {
+            border-radius: 0 0 4px 0;
+            &::after {
+              content: ' ';
+              float: left;
+              width: 6px;
+              height: 70px;
+              transform: skewX(-15deg);
+            }
+          }
+          i.righti {
+            border-radius: 0 0 0 4px;
+            &::after {
+              content: ' ';
+              float: left;
+              width: 6px;
+              height: 70px;
+              transform: skewX(15deg);
+            }
+          }
+          &_4{
+            i::after, &::after { background-color: @l4; }
+          }
+          &_3{
+            i::after, &::after { background-color: @l3; }
+          }
+          &_2{
+            i::after, &::after { background-color: @l2; }
+          }
+          &_1{
+            i::after, &::after { background-color: @l1; }
+          }
+        }
+      }
+    }
+  }
+  .donels{
+    li.done { 
+      color: @donecolor;
+      height: auto;
+      padding: 10px 15px;
+      background-color: #f3f7f5;
+      overflow: hidden;
+      .status{
+        border-color: @donecolor;
+        background-color: #c0c0c0;
+        &::before{
+          content: ' ';
+          position: absolute;
+          left:2px;
+          top: 5px;
+          width: 10px;
+          border-bottom: 1px #e3e3e3 solid;
+        }
+      }
+    }
+    li span.lev{
+      opacity: .4;
+      right: 720px;
+      bottom: 8px;
+      transform: rotate(90deg);
+      transition:all 0.8s ease-out;
+    }
+    .lev::after{
+      content: ' ';
+      position: absolute;
+      left: 5px;
+      top: 40px;
+      width: 1.3px;
+      height: 186px;
+      transition: all 1.2s linear;
+    }
+    .done .lev {
+      right: 0;
+      &::after{
+        height: 16px;
+      }
+    }
+  }
+}
