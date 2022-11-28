@@ -34,7 +34,7 @@
   </div>
 </template>
 <script setup>
-import {ref, reactive, defineEmits, onMounted, onUnmounted} from 'vue'
+import {ref, reactive, onMounted, onUnmounted} from 'vue'
 import { dateFormat, weeksarr, levelsarr } from '../assets/utils'
 const today = new Date()
 const daystr = dateFormat(new Date(today.getTime() + 24 * 60 * 60 * 1000), 'yyyy/MM/dd hh:mm')
