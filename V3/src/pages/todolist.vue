@@ -7,30 +7,26 @@
     </div>
     <Add @add="addHandler"></Add>
     <List :todos="todos"></List>
-    <div class="rightbar">
-      <strong>{{taskDet.title}}</strong>
-    </div>
   </div>
 </template>
-<script setup>
-import {ref} from 'vue'
+<script setup lang="ts">
+import {Ref, ref} from 'vue'
 import Add from '../components/add.vue'
 import List from '../components/list.vue'
 import { dateFormat } from '../assets/utils'
 import '../assets/style.less'
 
-const todos = ref([])
-const taskDet = ref({ title: '' })
-const aday = ref('')
+const todos: Ref<doItem[]> = ref([])
+const aday: Ref<string> = ref('')
 aday.value = dateFormat(new Date(), 'MM月dd号 w')
 
-function addHandler ({ content, level, ...when }) {
-  const len = todos.value.length
+function addHandler ({ content, level, ...when }: doItem): void {
+  const len: number = todos.value.length
   todos.value.push({ 
     content: content, 
     status: 'newt', 
-    level: level.lev, 
-    times: (when.week && when.week.v || '') + when.hm
+    level: level, 
+    times: (when.week || '') + when.hm
   })
   setTimeout(() => {
     todos.value[len].status = 'will'

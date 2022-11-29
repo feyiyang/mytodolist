@@ -3,6 +3,7 @@
 </template>
 <script setup>
 import todolist from './pages/todolist.vue'
+import './types.d.ts'
 </script>
 <style lang="less">
 // 重置样式

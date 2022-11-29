@@ -260,7 +260,7 @@
       right: 720px;
       bottom: 8px;
       transform: rotate(90deg);
-      transition:all 0.8s ease-out;
+      transition:all 0.8s ease-out, opacity 2s ease-in;
     }
     .lev::after{
       content: ' ';
@@ -273,6 +273,7 @@
     }
     .done .lev {
       right: 0;
+      opacity: .2;
       &::after{
         height: 16px;
       }

@@ -1,4 +1,4 @@
-export const weeksarr = [
+export const weeksarr: selWeek[] = [
   { k: 1, v: '一'},
   { k: 2, v: '二'},
   { k: 3, v: '三'},
@@ -6,16 +6,16 @@ export const weeksarr = [
   { k: 5, v: '五'},
   { k: 6, v: '六'},
   { k: 7, v: '日'},
-  { K: 8, v: '某天'}
+  { k: 8, v: '某天'}
 ]
-export const levelsarr = [
+export const levelsarr: selLev[] = [
   { lev: 1, v: '紧要' },
   { lev: 2, v: '重要' },
   { lev: 3, v: '次要' },
   { lev: 4, v: '常要' }
 ]
-export function dateFormat(date = new Date(), fmt) {
-  const o = {
+export function dateFormat(date = new Date(), fmt: string): string {
+  const o: Record<string, any> = {
     'M+': date.getMonth() + 1,
     'd+': date.getDate(),
     'h+': date.getHours(),

@@ -23,23 +23,23 @@
     </ul>
   </template>
 </template>
-<script setup>
-import {ref, defineProps} from 'vue'
-const props = defineProps(['todos'])
-const donelist = ref([])
+<script setup lang="ts">
+import {Ref, ref, defineProps} from 'vue'
+const props = defineProps<{ todos: doItem[] }>()
+const donelist: Ref<doItem[]> = ref([])
 
-function done (index) {
+function done (index: number): void {
   props.todos[index].status = 'init'
   setTimeout(() => {
-    const item = JSON.parse(JSON.stringify(props.todos.splice(index, 1)))
+    const item: doItem = JSON.parse(JSON.stringify(props.todos.splice(index, 1)))
     donelist.value = donelist.value.concat(item)
   }, 400)
   setTimeout(() => { 
-    const len = donelist.value.length
+    const len: number = donelist.value.length
     donelist.value[len - 1].status = 'done'
   }, 450)
 }
-function delDone (index) {
+function delDone (index: number): void {
   donelist.value.splice(index, 1)
 }
 </script>

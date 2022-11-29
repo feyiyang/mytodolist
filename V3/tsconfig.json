@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "jsx": "preserve",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "src/**/*", "src/types.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
