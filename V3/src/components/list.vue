@@ -10,7 +10,7 @@
     </li>
   </ul>
   <template v-if="donelist.length">
-    <span class="donet">已完成◿</span>
+    <span class="donet">已完成◿<i @click="clearDone"> 清空</i></span>
     <ul class="todos donels">
       <li v-for="(item, index) in donelist" :key="index" :class="item.status">
         <span class="status" @click="delDone(index)"></span>
@@ -24,7 +24,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import {Ref, ref, defineProps} from 'vue'
+import {Ref, ref} from 'vue'
 const props = defineProps<{ todos: doItem[] }>()
 const donelist: Ref<doItem[]> = ref([])
 
@@ -41,5 +41,8 @@ function done (index: number): void {
 }
 function delDone (index: number): void {
   donelist.value.splice(index, 1)
+}
+function clearDone (): void {
+  donelist.value = []
 }
 </script>

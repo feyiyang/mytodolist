@@ -8,8 +8,8 @@
       <div class="times">
         <div class="come">
           <span @click="reTimeHdl">提醒&nbsp;·&nbsp;</span>
-          <span class="btn_sw" @click="(e) => { showPopHdl(e, 'shoWeeks') }">{{selState.selWeek.v}} </span>
-          <input v-model="selTime" :class="[selState.selWeek.v ? 'short' : '']" @click="(e) => { showPopHdl(e, 'shoWeeks') }" />
+          <span class="btn_sw" @click.stop="showPopHdl('shoWeeks', true)">{{selState.selWeek.v}} </span>
+          <input v-model="selTime" :class="[selState.selWeek.v ? 'short' : '']" @click.stop="showPopHdl('shoWeeks')" />
         </div>
         <ul class="popover timesls" v-if="shoWeeks">
           <template v-for="(item, index) in weeks" :key="index">
@@ -20,7 +20,7 @@
       </div>
       <div class="level">
         <span class="btn" @click="setLev()">要次&nbsp;·&nbsp;</span>
-        <span class="" @click="(e) => { showPopHdl(e, 'showLevels') }">{{selState.selLev.v}}</span>
+        <span class="" @click.stop="showPopHdl('showLevels')">{{selState.selLev.v}}</span>
         <ul v-if="showLevels" class="popover levels">
           <li v-for="(item, index) in levelsarr" :key="index" :class="'lev_' + item.lev" @click="setLev(item)">
             {{item.v}}
@@ -83,13 +83,10 @@ function reTimeHdl (): void {
   selState.selWeek.v = ''
   selTime.value = daystr
 }
-function showPopHdl (e: any, popover: string): void | boolean {
+function showPopHdl (popover: string, isBtn?: boolean): void {
   if (!popover) return
-  shoWeeks.value = e.target.className == 'btn_sw' || (popover === 'shoWeeks' && selState.selWeek.v === '')
+  shoWeeks.value = isBtn || (popover === 'shoWeeks' && selState.selWeek.v === '')
   showLevels.value = popover === 'showLevels'
-  e.preventDefault()
-  e.stopImmediatePropagation()
-  return false
 }
 function setLev (itm?: selLev): void {
   showLevels.value = false
