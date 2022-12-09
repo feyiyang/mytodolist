@@ -1,10 +1,14 @@
 import axios, { AxiosInstance, type AxiosRequestConfig } from 'axios'
 import { useMessage } from '@idux/components/message'
+import { useLoadingBar } from '@idux/components/loading-bar'
 
 const message = useMessage()
+const loadingBar = useLoadingBar()
+
+/*-----  axios实例 START  ----*/
 // const controller = new AbortController() // controller.abort() 取消请求
 const instance: AxiosInstance = axios.create()
-
+instance.defaults.baseURL = '/api'
 instance.defaults.timeout = 2500
 instance.defaults.headers.common['Authorization'] = ''
 instance.defaults.headers.post['Content-Type'] =
@@ -28,7 +32,6 @@ instance.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-
 // 添加响应拦截器
 instance.interceptors.response.use(
   (response: any) => {
@@ -42,29 +45,20 @@ instance.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-/* axios实例 END */
+/*---- axios实例 END ----*/
 
-interface httpParams {
-  method?: 'get' | 'GET' | 'post' | 'POST' | 'options' | 'OPTIONS'
-  url: string
-  data?: any
+export interface apiInter {
+  [name: string]: AxiosRequestConfig
 }
 
-export function http<T>(params: httpParams | any) {
-  const { method = 'get', url, data, ...otherParams } = params
+export function http<T>(params: AxiosRequestConfig) {
   return new Promise<T>((resolve, reject) => {
-    instance({
-      method,
-      url,
-      data,
-      ...otherParams
-    })
-      .then((res) => {
-        const result: any = res.data
-        if (result.code == 200) {
-          resolve(result)
+    instance(params)
+      .then((res: any) => {
+        if (res.code == 200) {
+          resolve(res.result)
         } else {
-          resolve(result)
+          resolve(res.result)
         }
       })
       .catch((error) => {
@@ -76,4 +70,32 @@ export function http<T>(params: httpParams | any) {
         reject(error)
       })
   })
+}
+
+interface wrapInter {
+  [key: string]: Function
+}
+interface alertConfig {
+  loadBar?: boolean
+}
+export function apiFunc(apiObj: apiInter): wrapInter {
+  const apiWrap = Object.create(null)
+
+  for (const [key, cfg] of Object.entries(apiObj)) {
+    apiWrap[key] = async function(data: object, alerts: alertConfig = {}) {
+      const { loadBar = false } = alerts
+      const params: AxiosRequestConfig = Object.assign({method: 'post'}, cfg)
+      if (params.method === 'post') {
+        params.data = data
+      } else {
+        params.params = data
+      }
+      loadBar && loadingBar.start({ mask: true })
+      const res = await http(params)
+      loadBar && loadingBar.finish()
+      return res
+    }
+  }
+
+  return apiWrap
 }

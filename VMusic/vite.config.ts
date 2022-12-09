@@ -9,6 +9,13 @@ export default defineConfig({
       '@': '/src'
     }
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "@/assets/vars.scss";'
+      }
+    }
+  },
   server: {
     proxy: {
       '/api': {
