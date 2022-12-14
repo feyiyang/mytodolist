@@ -2,11 +2,13 @@ import { apiFunc, type apiInter } from '../featch'
 
 const search: apiInter = {
   search: {
-    method: 'get',
     url: '/search'
   },
-  searchDefault: {
+  defaultKey: {
     url: '/search/default'
+  },
+  hots: {
+    url: '/search/hot'
   }
 }
 

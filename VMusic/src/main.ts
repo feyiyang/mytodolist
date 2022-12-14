@@ -1,6 +1,14 @@
 import { createApp } from 'vue'
-import Idux from './idux'
+import Antd, { ConfigProvider } from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.variable.min.css'
 import './assets/style.scss'
+import router from './router'
 import App from './App.vue'
 
-createApp(App).use(Idux).mount('#app')
+ConfigProvider.config({
+  theme: {
+    primaryColor: '#66cc99',
+  }
+})
+
+createApp(App).use(router).use(Antd).mount('#app')

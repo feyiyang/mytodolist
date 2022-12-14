@@ -11,8 +11,8 @@
     "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\""
   },
   "dependencies": {
-    "@idux/cdk": "^1.2.3",
-    "@idux/components": "^1.2.3",
+    "@ant-design/icons-vue": "^6.1.0",
+    "ant-design-vue": "^3.2.15",
     "axios": "^1.2.0",
     "vue": "^3.2.41",
     "vue-router": "^4.1.6"

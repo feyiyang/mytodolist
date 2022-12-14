@@ -1,9 +1,5 @@
 import axios, { AxiosInstance, type AxiosRequestConfig } from 'axios'
-import { useMessage } from '@idux/components/message'
-import { useLoadingBar } from '@idux/components/loading-bar'
-
-const message = useMessage()
-const loadingBar = useLoadingBar()
+import { message } from 'ant-design-vue'
 
 /*-----  axios实例 START  ----*/
 // const controller = new AbortController() // controller.abort() 取消请求
@@ -56,15 +52,15 @@ export function http<T>(params: AxiosRequestConfig) {
     instance(params)
       .then((res: any) => {
         if (res.code == 200) {
-          resolve(res.result)
+          resolve(res.result || res.data)
         } else {
           resolve(res.result)
         }
       })
       .catch((error) => {
         const errorMsg =
-          (error.response.data && error.response.data.message) ||
-          (error.response.data && error.response.data.msg) ||
+          (error.response?.data && error.response.data.message) ||
+          (error.response?.data && error.response.data.msg) ||
           '服务器异常'
         message.error(errorMsg)
         reject(error)
@@ -82,18 +78,20 @@ export function apiFunc(apiObj: apiInter): wrapInter {
   const apiWrap = Object.create(null)
 
   for (const [key, cfg] of Object.entries(apiObj)) {
-    apiWrap[key] = async function(data: object, alerts: alertConfig = {}) {
+    apiWrap[key] = function(data: object, alerts: alertConfig = {}) {
       const { loadBar = false } = alerts
-      const params: AxiosRequestConfig = Object.assign({method: 'post'}, cfg)
+      const params: AxiosRequestConfig = Object.assign({method: 'get'}, cfg)
       if (params.method === 'post') {
         params.data = data
       } else {
         params.params = data
       }
-      loadBar && loadingBar.start({ mask: true })
-      const res = await http(params)
-      loadBar && loadingBar.finish()
-      return res
+      // loadBar && loadingBar.start({ mask: true })
+      // const res = http(params)
+      // console.log(res)
+      // loadBar && loadingBar.finish()
+      // return res
+      return http(params)
     }
   }
 
