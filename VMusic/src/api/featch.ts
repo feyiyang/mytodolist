@@ -54,7 +54,7 @@ export function http<T>(params: AxiosRequestConfig) {
         if (res.code == 200) {
           resolve(res.result || res.data)
         } else {
-          resolve(res.result)
+          resolve(res)
         }
       })
       .catch((error) => {
@@ -82,14 +82,12 @@ export function apiFunc(apiObj: apiInter): wrapInter {
       const { loadBar = false } = alerts
       const params: AxiosRequestConfig = Object.assign({method: 'get'}, cfg)
       if (params.method === 'post') {
-        params.data = data
+        params.data = Object.assign({}, params.data, data)
       } else {
         params.params = data
       }
-      // loadBar && loadingBar.start({ mask: true })
       // const res = http(params)
       // console.log(res)
-      // loadBar && loadingBar.finish()
       // return res
       return http(params)
     }

@@ -4,7 +4,9 @@
     <div id="main">
       <top-bar></top-bar>
       <div class="contain">
-        <router-view></router-view>
+        <a-spin :spinning="spinning">
+          <router-view></router-view>
+        </a-spin>
       </div>
       <div class="playbar"></div>
     </div>
@@ -14,4 +16,6 @@
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import SideBar from './components/SideBar.vue'
 import TopBar from './components/TopBar.vue'
+import { useSpining } from './utils/hooks'
+const [spinning] = useSpining()
 </script>

@@ -11,58 +11,26 @@
       </ul>
     </div>
     <div class="user">
-      <a-button size="small" @click="loginVisble = true">登录</a-button>
+      <a-button size="small" @click="setModalVisible('login', true)">登录</a-button>
     </div>
   </div>
-  <a-modal v-model:visible="loginVisble" title="邮箱登录" width="400px" :footer="null">
-    <a-form
-      :model="formState"
-      name="basic"
-      autocomplete="off"
-      @finish="onLogin"
-      @finishFailed="onLoginFailed"
-    >
-      <a-form-item label="邮箱" name="email" :rules="[{ required: true, message: '请输入邮箱!' }]">
-        <a-input v-model:value="formState.email" />
-      </a-form-item>
-      <a-form-item label="密码" name="password" :rules="[{ required: true, message: '请输入密码!' }]">
-        <a-input-password v-model:value="formState.password" />
-      </a-form-item>
-      <a-form-item name="remember">
-        <a-checkbox v-model:checked="formState.remember">Remember me</a-checkbox>
-      </a-form-item>
-      <a-form-item>
-        <a-button :disabled="loginDisabled" type="primary" html-type="submit" class="login-form-button">
-          Log in
-        </a-button>
-        Or
-        <a href="">register now!</a>
-      </a-form-item>
-    </a-form>
-  </a-modal>
+  <login-modal></login-modal>
 </template>
 <script setup lang="ts">
-import { Ref, ref, reactive, computed } from 'vue'
+import { Ref, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { routeCfg } from '@/utils/types/route.type'
-import { loginState } from '@/utils/types/user.type'
+import { useShowModals } from '@/utils/hooks'
+import loginModal from '@/components/Modals/Login.vue'
 
 const router = useRouter()
+const [modalsVisible, setModalVisible] = useShowModals()
 const current: Ref<number> = ref(0)
-const loginVisble: Ref<boolean> = ref(false)  
 const ols: Ref<routeCfg[]> = ref([
   { val: '音乐馆', path: '/home', icon: `musics` },
   { val: 'MV', path: '/mv', icon: 'MV' },
   { val: '电台', path: '/station', icon: 'station' }
 ])
-const formState = reactive<loginState>({
-  email: '',
-  password: '',
-  remember: true,
-})
-const loginDisabled = computed(() => {
-  return !(formState.email && formState.password)
-})
 
 function linkFn(ind: number): void {
   current.value = ind
@@ -70,8 +38,7 @@ function linkFn(ind: number): void {
     path: ols.value[ind].path
   })
 }
-function onLogin(): void {}
-function onLoginFailed(): void {}
+
 </script>
 <style lang="scss" scoped>
 $indent: 12px;
