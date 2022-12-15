@@ -5,16 +5,16 @@
       <right-outlined @click="forwardHandle" />
     </div>
     <div class="searchbar">
-      <a-input-search v-model:value="searchVal" :defaultValue="defaultKey" @focus="dropShow" @blur="showDrops = false" @search="search"></a-input-search>
+      <a-input-search v-model:value="searchVal" :defaultValue="defaultKey" :placeholder="defaultKey" @focus="dropShow" @blur="showDrops = false" @search="search"></a-input-search>
       <!-- 热搜、建议 -->
       <div class="drops" v-if="showDrops">
         <div class="default">
-          <strong>快搜:</strong>
+          <span>历史:</span>
           &ensp;<a-tag @click="search(defaultKey)">{{defaultKey}}</a-tag>
         </div>
         <div class="hots">
           <strong>热搜:</strong>
-          <a-list size="small" :data-source="hotLs">
+          <a-list size="small" :data-source="hotLs" :loading="hotsLoading">
             <template #renderItem="{ item }">
               <a-list-item @click="search(item.first)">{{ item.first }}</a-list-item>
             </template>
@@ -35,12 +35,13 @@ const searchVal = ref<string>('')
 const defaultKey = ref<string>(' ')
 const showDrops = ref<boolean>(false)
 const hotLs = ref<any[]>([])
+const hotsLoading = ref<boolean>(false)
 
 getDefaultKey()
 
 function search(val?: string | undefined):void {
   searchApi.search({
-    keywords: val || searchVal
+    keywords: val || searchVal.value || defaultKey.value
   }).then((res: any) => {
     console.log(res)
   })
@@ -55,8 +56,10 @@ function dropShow():void {
   !hotLs.value.length && getHots()
 }
 function getHots():void {
+  hotsLoading.value = true
   searchApi.hots().then((res: any) => {
     hotLs.value = res.hots
+    hotsLoading.value = false
   })
 }
 function backHandle():void {
