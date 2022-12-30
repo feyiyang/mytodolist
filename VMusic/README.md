@@ -1,16 +1,64 @@
-# Vue 3 + TypeScript + Vite
+`npm install`   
+`npm run dev`  
+  
+  
+### IDE：VSCode  
+[vue IDE支持(Volar)](https://cn.vuejs.org/guide/scaling-up/tooling.html#ide-support)、Prettier-Code formater、Prettier Eslint  
+  
+### Vue3 + TypeScript + Vite
+[vite](https://vitejs.cn/vite3-cn/)初始化项目   
+### vue-router4
+router.ts 按[文档](https://router.vuejs.org/zh/)配置路由  
+### axios封装
+src/api/featch 封装[axios](https://www.axios-http.cn/)并对api提供方法, src/api/servers 提供接口api枚举， /src/api/index 对外提供所有api  
+### css预处理器 scss
+src/assets/vars.scss 定义全局变量   
+### ui框架
+[Ant Design Vue](https://www.antdv.com/docs/vue/introduce-cn)  
+  
+### 结构
+```
+目录
+│  App.vue
+│  main.ts
+│  router.ts
+│  vite-env.d.ts
+│  
+├─api
+│  │  featch.ts
+│  │  index.ts
+│  │  
+│  └─servers
+│          song.ts
+│          user.ts
+│          
+├─assets
+│  │  music.svg
+│  │  style.scss
+│  │  vars.scss
+│  │  
+│  └─img
+│      └─icons
+│              musics.svg
+│              musics_active.svg
+│              MV.svg
+│              MV_active.svg
+│              station.svg
+│              station_active.svg
+│              
+├─components
+│      SideBar.vue
+│      TopBar.vue
+│      
+├─utils
+│  └─types
+│          route.type.ts
+│          user.type.ts
+│          
+└─views
+        Home.vue
+        Mv.vue
+        searchResult.vue
+        Station.vue
+```
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
-
-## Type Support For `.vue` Imports in TS
-
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
-
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
-
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
