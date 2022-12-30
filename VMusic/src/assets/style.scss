@@ -1,3 +1,4 @@
+// reset css
 * {
   margin: 0;
   padding: 0;
@@ -37,9 +38,16 @@ body{
 }
 
 #main {
-  margin-left: $sidewidth;
+  display: flex;
+  flex-flow: column;
+  margin-left: $sidewidth + 30;
   height: 100%;
   >.contain{
-    padding: 15px;
+    padding: 10px 0;
+    height: 100%;
+    overflow: hidden;
+  }
+  .arco-spin{
+    width: 100%;
   }
 }

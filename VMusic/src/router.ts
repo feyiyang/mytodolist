@@ -4,7 +4,14 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/home',
     alias: '/',
-    component: () => import('@/views/Home.vue')
+    component: () => import('@/views/home/index.vue'),
+    children: [
+      {
+        path: '/blocks',
+        alias: '/',
+        component: () => import('@/views/home/blocks.vue')
+      }
+    ]
   },
   {
     path: '/mv',

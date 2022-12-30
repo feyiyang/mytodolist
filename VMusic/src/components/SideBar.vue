@@ -11,7 +11,8 @@
       </ul>
     </div>
     <div class="user">
-      <a-button size="small" @click="setModalVisible('login', true)">登录</a-button>
+      <a-button v-if="!profile?.userId" size="small" type="outline" status="success" @click="setModalVisible('login', true)">登录</a-button>
+      <p v-else>{{profile.nickname}}</p>
     </div>
   </div>
   <login-modal></login-modal>
@@ -20,11 +21,12 @@
 import { Ref, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { routeCfg } from '@/utils/types/route.type'
-import { useShowModals } from '@/utils/hooks'
+import { useShowModals, useAccount } from '@/utils/hooks'
 import loginModal from '@/components/Modals/Login.vue'
 
 const router = useRouter()
-const [modalsVisible, setModalVisible] = useShowModals()
+const [, setModalVisible] = useShowModals()
+const [{ profile }] = useAccount()
 const current: Ref<number> = ref(0)
 const ols: Ref<routeCfg[]> = ref([
   { val: '音乐馆', path: '/home', icon: `musics` },
@@ -42,18 +44,20 @@ function linkFn(ind: number): void {
 </script>
 <style lang="scss" scoped>
 $indent: 12px;
-$sidebg: #f4f1ff;
+$sidebg: #f3f6fa;
 h1 {
   font: {
     size: 20px;
     weight: 300;
   }
   line-height: 26px;
-  padding: 5px;
+  padding: 15px 5px 25px;
   text-indent: $indent - 6;
 }
 h3 {
+  margin-bottom: 10px;
   font-size: 14px;
+  font-weight: 500;
   color: $textligth;
   text-indent: $indent;
 }
@@ -63,24 +67,26 @@ h3 {
   flex-flow: column;
   width: $sidewidth;
   height: 100%;
-  padding: 5px 15px;
+  padding: 0 15px;
   position: relative;
   background-color: $sidebg;
 }
 .list {
-  padding-top: 5px;
+  padding-top: 10px;
   li {
     padding-left: $indent;
+    margin-bottom: 10px;
     height: 30px;
     line-height: 30px;
-    border-radius: 2px;
+    border-radius: 4px;
     cursor: pointer;
     &:hover {
       color: $mygreen;
     }
     &.active{
-      background-color: $mygreen;
+      // background-color: $mygreen;
       color: #fff;
+      background-image: linear-gradient(45deg, $mygreen 55%, $somegreen);
     }
     img{
       height: 14px;

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, type AxiosRequestConfig } from 'axios'
-import { message } from 'ant-design-vue'
+import { Message } from '@arco-design/web-vue'
 
 /*-----  axios实例 START  ----*/
 // const controller = new AbortController() // controller.abort() 取消请求
@@ -52,7 +52,7 @@ export function http<T>(params: AxiosRequestConfig) {
     instance(params)
       .then((res: any) => {
         if (res.code == 200) {
-          resolve(res.result || res.data)
+          resolve(res.result || res.data || res)
         } else {
           resolve(res)
         }
@@ -62,7 +62,7 @@ export function http<T>(params: AxiosRequestConfig) {
           (error.response?.data && error.response.data.message) ||
           (error.response?.data && error.response.data.msg) ||
           '服务器异常'
-        message.error(errorMsg)
+          Message.error(errorMsg)
         reject(error)
       })
   })
@@ -81,11 +81,7 @@ export function apiFunc(apiObj: apiInter): wrapInter {
     apiWrap[key] = function(data: object, alerts: alertConfig = {}) {
       const { loadBar = false } = alerts
       const params: AxiosRequestConfig = Object.assign({method: 'get'}, cfg)
-      if (params.method === 'post') {
-        params.data = Object.assign({}, params.data, data)
-      } else {
-        params.params = data
-      }
+      params[params.method === 'post' ? 'data' : 'params'] = Object.assign({}, params.data, data)
       // const res = http(params)
       // console.log(res)
       // return res

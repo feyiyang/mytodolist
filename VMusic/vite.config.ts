@@ -11,6 +11,19 @@ export default defineConfig({
   },
   css: {
     preprocessorOptions: {
+      less: {
+        modifyVars: {
+          'primary-1': '#E8FFEF',
+          'primary-2': '#B2F3C9',
+          'primary-3': '#81E6A8',
+          'primary-4': '#17ce91',
+          'primary-5': '#04A457',
+          'primary-6': '#35cfb6',
+          'neutral-3': '#fff',
+          'tabs-line-color-header-border': '#fff'
+        },
+        javascriptEnabled: true
+      },
       scss: {
         additionalData: '@import "@/assets/vars.scss";'
       }

@@ -1,14 +1,16 @@
 import { createApp } from 'vue'
-import Antd, { ConfigProvider } from 'ant-design-vue'
-import 'ant-design-vue/dist/antd.variable.min.css'
+import ArcoVue from '@arco-design/web-vue'
+import ArcoVueIcon from '@arco-design/web-vue/es/icon'
+import VueSplide from '@splidejs/vue-splide'
+import '@arco-design/web-vue/dist/arco.less'
+import '@splidejs/splide/css'
 import './assets/style.scss'
 import router from './router'
 import App from './App.vue'
 
-ConfigProvider.config({
-  theme: {
-    primaryColor: '#66cc99',
-  }
-})
-
-createApp(App).use(router).use(Antd).mount('#app')
+createApp(App)
+  .use(router)
+  .use(ArcoVue)
+  .use(ArcoVueIcon)
+  .use( VueSplide )
+  .mount('#app')
