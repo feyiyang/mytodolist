@@ -6,7 +6,13 @@
       <icon-right @click="forwardHandle" />
     </div>
     <div class="searchbar">
-      <a-input-search v-model:value="searchVal" :placeholder="defaultKey" @focus="dropShow" @blur="showDrops = false" @search="search"></a-input-search>
+      <a-input-search
+        v-model:value="searchVal"
+        :placeholder="defaultKey"
+        @focus="dropShow"
+        @blur="showDrops = false"
+        @search="search"
+      ></a-input-search>
       <!-- 热搜、建议 -->
       <div class="drops" v-if="showDrops">
         <!-- <div class="default">
@@ -15,9 +21,16 @@
         </div> -->
         <div class="hots">
           <strong>热搜:</strong>
-          <a-list size="small" :data="hotLs" :bordered="false" :loading="hotsLoading">
+          <a-list
+            size="small"
+            :data="hotLs"
+            :bordered="false"
+            :loading="hotsLoading"
+          >
             <template #item="{ item }">
-              <a-list-item @click="search(item.first)">{{ item.first }}</a-list-item>
+              <a-list-item @click="search(item.first)">{{
+                item.first
+              }}</a-list-item>
             </template>
           </a-list>
         </div>
@@ -40,41 +53,42 @@ const hotsLoading = ref<boolean>(false)
 
 getDefaultKey()
 
-function search(val?: string | undefined):void {
-  searchApi.search({
-    keywords: val || searchVal.value || defaultVal.value
-  }).then((res: any) => {
-    console.log(res)
-  })
+function search(val?: string | undefined): void {
+  searchApi
+    .search({
+      keywords: val || searchVal.value || defaultVal.value
+    })
+    .then((res: any) => {
+      console.log(res)
+    })
 }
-function getDefaultKey():void {
+function getDefaultKey(): void {
   searchApi.defaultKey().then((res: any) => {
     // console.log(res)
     defaultKey.value = res.showKeyword
     defaultVal.value = res.realkeyword
   })
 }
-function dropShow():void {
+function dropShow(): void {
   showDrops.value = true
   !hotLs.value.length && getHots()
 }
-function getHots():void {
+function getHots(): void {
   hotsLoading.value = true
   searchApi.hots().then((res: any) => {
     hotLs.value = res.hots
     hotsLoading.value = false
   })
 }
-function backHandle():void {
+function backHandle(): void {
   router.back()
 }
-function forwardHandle():void {
+function forwardHandle(): void {
   router.forward()
 }
-
 </script>
 <style lang="scss" scoped>
-.topbar{
+.topbar {
   display: flex;
   justify-content: space-between;
   position: relative;
@@ -84,7 +98,7 @@ function forwardHandle():void {
 .searchbar {
   width: 170px;
 }
-.drops{
+.drops {
   position: absolute;
   right: 2px;
   top: 50px;
@@ -94,10 +108,10 @@ function forwardHandle():void {
   padding: 10px;
   border: 2px solid $bgrey;
   background-color: #fff;
-  .default{
+  .default {
     padding-bottom: 10px;
   }
-  strong{
+  strong {
     font-weight: normal;
   }
 }

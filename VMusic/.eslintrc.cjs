@@ -21,6 +21,12 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
     '@typescript-eslint/no-explicit-any': ['off'],
-    'vue/no-multiple-template-root': 'off'
+    'vue/no-multiple-template-root': 'off',
+    'vue/multi-word-component-names': [
+      'error',
+      {
+        ignores: ['index', 'blocks']
+      }
+    ]
   }
 }

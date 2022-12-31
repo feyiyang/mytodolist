@@ -62,14 +62,14 @@ export function http<T>(params: AxiosRequestConfig) {
           (error.response?.data && error.response.data.message) ||
           (error.response?.data && error.response.data.msg) ||
           '服务器异常'
-          Message.error(errorMsg)
+        Message.error(errorMsg)
         reject(error)
       })
   })
 }
 
 interface wrapInter {
-  [key: string]: Function
+  [key: string]: () => Promise<any>
 }
 interface alertConfig {
   loadBar?: boolean
@@ -78,10 +78,14 @@ export function apiFunc(apiObj: apiInter): wrapInter {
   const apiWrap = Object.create(null)
 
   for (const [key, cfg] of Object.entries(apiObj)) {
-    apiWrap[key] = function(data: object, alerts: alertConfig = {}) {
+    apiWrap[key] = function (data: object, alerts: alertConfig = {}) {
       const { loadBar = false } = alerts
-      const params: AxiosRequestConfig = Object.assign({method: 'get'}, cfg)
-      params[params.method === 'post' ? 'data' : 'params'] = Object.assign({}, params.data, data)
+      const params: AxiosRequestConfig = Object.assign({ method: 'get' }, cfg)
+      params[params.method === 'post' ? 'data' : 'params'] = Object.assign(
+        {},
+        params.data,
+        data
+      )
       // const res = http(params)
       // console.log(res)
       // return res

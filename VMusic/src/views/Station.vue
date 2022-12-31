@@ -1,5 +1,3 @@
 <template>
-  <div>
-    station page
-  </div>
+  <div>station page</div>
 </template>

@@ -1,5 +1,3 @@
 <template>
-  <div>
-    MV page
-  </div>
+  <div>MV page</div>
 </template>

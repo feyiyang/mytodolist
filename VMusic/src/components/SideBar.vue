@@ -1,18 +1,36 @@
 <template>
   <div id="sidebar">
-    <h1><img src="@/assets/music.svg" height="20" alt="音乐">&ensp;EN音乐</h1>
+    <h1><img src="@/assets/music.svg" height="20" alt="音乐" />&ensp;EN音乐</h1>
     <div class="navs">
       <h3>在线音乐</h3>
       <ul class="list">
-        <li v-for="(link, index) in ols" :class="index == current && 'active'" :key="index" @click="linkFn(index)">
-          <img v-if="link.icon" :src="`/src/assets/img/icons/${link.icon}${index == current ? '_active' : ''}.svg`" alt="">
-          {{link.val}}
+        <li
+          v-for="(link, index) in ols"
+          :class="index == current && 'active'"
+          :key="index"
+          @click="linkFn(index)"
+        >
+          <img
+            v-if="link.icon"
+            :src="`/src/assets/img/icons/${link.icon}${
+              index == current ? '_active' : ''
+            }.svg`"
+            alt=""
+          />
+          {{ link.val }}
         </li>
       </ul>
     </div>
     <div class="user">
-      <a-button v-if="!profile?.userId" size="small" type="outline" status="success" @click="setModalVisible('login', true)">登录</a-button>
-      <p v-else>{{profile.nickname}}</p>
+      <a-button
+        v-if="!profile?.userId"
+        size="small"
+        type="outline"
+        status="success"
+        @click="setModalVisible('login', true)"
+        >登录</a-button
+      >
+      <p v-else>{{ profile.nickname }}</p>
     </div>
   </div>
   <login-modal></login-modal>
@@ -40,7 +58,6 @@ function linkFn(ind: number): void {
     path: ols.value[ind].path
   })
 }
-
 </script>
 <style lang="scss" scoped>
 $indent: 12px;
@@ -61,7 +78,7 @@ h3 {
   color: $textligth;
   text-indent: $indent;
 }
-#sidebar{
+#sidebar {
   float: left;
   display: flex;
   flex-flow: column;
@@ -83,21 +100,21 @@ h3 {
     &:hover {
       color: $mygreen;
     }
-    &.active{
+    &.active {
       // background-color: $mygreen;
       color: #fff;
       background-image: linear-gradient(45deg, $mygreen 55%, $somegreen);
     }
-    img{
+    img {
       height: 14px;
       margin: -3px 4px 0 0;
     }
   }
 }
-.navs{
+.navs {
   flex: 1;
 }
-.user{
+.user {
   padding: 10px 15px;
   text-align: center;
 }

@@ -27,7 +27,7 @@ const song: apiInter = {
     url: '/recommend/resource'
   },
   // 推荐歌单
-  personalized : {
+  personalized: {
     url: '/personalized',
     data: {
       limit: 8
@@ -47,5 +47,5 @@ const song: apiInter = {
   }
 }
 
-export const searchApi =  apiFunc(search)
+export const searchApi = apiFunc(search)
 export const songApi = apiFunc(song)

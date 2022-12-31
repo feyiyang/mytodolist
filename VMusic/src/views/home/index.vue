@@ -1,9 +1,19 @@
 <template>
-  <a-scrollbar outer-class="home" :outer-style="{width:'100%',height:'100%',overflow:'hidden auto'}" style="padding:0 40px;height:100%;overflow:hidden auto;">
+  <a-scrollbar
+    outer-class="home"
+    :outer-style="{ width: '100%', height: '100%', overflow: 'hidden auto' }"
+    style="padding: 0 40px; height: 100%; overflow: hidden auto"
+  >
     <div class="content">
       <strong class="title">音乐馆</strong>
-      <a-tabs v-model:activeKey="activeKey" class="home_tabs" size="small" :tabBarGutter="20" :headerPadding="false">
-        <a-tab-pane v-for="(item, index) in tabs" :key="item.key" :title="item.name">
+      <a-tabs
+        v-model:activeKey="activeKey"
+        class="home_tabs"
+        size="small"
+        :tabBarGutter="20"
+        :headerPadding="false"
+      >
+        <a-tab-pane v-for="item in tabs" :key="item.key" :title="item.name">
         </a-tab-pane>
       </a-tabs>
       <router-view></router-view>
@@ -20,24 +30,23 @@ const tabs = ref([
   { key: '3', path: '/ranks', name: '排行榜' },
   { key: '4', path: '/singers', name: '歌手' }
 ])
-
 </script>
 <style lang="scss" scoped>
 .home {
   // height: 100%;
   // overflow: hidden auto;
-  &_tabs{
+  &_tabs {
     position: sticky;
     top: 0;
     z-index: 3;
     background-color: #fff;
   }
-  >.content{
+  > .content {
     width: 100%;
     overflow-x: hidden;
   }
 }
-strong.title{
+strong.title {
   display: block;
   font: {
     size: 22px;

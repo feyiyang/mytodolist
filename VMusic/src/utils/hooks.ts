@@ -7,44 +7,58 @@ const storage = useStorage()
 
 const isLogin = ref<boolean>(storage.get('isLogin') || false)
 export function useLoginState(): useReturn {
-  return [isLogin.value, (val: boolean): void => {
-    isLogin.value = val
-    storage.set('isLogin', val)
-  }, localStorage.getItem('token')]
+  return [
+    isLogin.value,
+    (val: boolean): void => {
+      isLogin.value = val
+      storage.set('isLogin', val)
+    },
+    localStorage.getItem('token')
+  ]
 }
 
 let userInfo = reactive({})
 export function useUserInfo(): useReturn {
-  return [userInfo, (val: any) => {
-    userInfo = Object.assign({}, userInfo, val)
-  }]
+  return [
+    userInfo,
+    (val: any) => {
+      userInfo = Object.assign({}, userInfo, val)
+    }
+  ]
 }
 
 const modalVisibles: any = reactive({
   login: false
 })
 export function useShowModals(): useReturn {
-  return [modalVisibles, (key: string, val: boolean): void => {
-    modalVisibles[key] = val
-  }]
+  return [
+    modalVisibles,
+    (key: string, val: boolean): void => {
+      modalVisibles[key] = val
+    }
+  ]
 }
 
 const mainSpining = ref<boolean>(false)
 export function useSpining(): useReturn {
-  return [mainSpining, (val: boolean) => {
-    mainSpining.value = val
-  }]
+  return [
+    mainSpining,
+    (val: boolean) => {
+      mainSpining.value = val
+    }
+  ]
 }
 
-export function useStorage(storage: Storage = localStorage, defaults?: any):{[method: string]: Function} {
+export function useStorage(
+  storage: Storage = localStorage,
+  defaults?: any
+): { [method: string]: Function } {
   function get(key: string): Ref<any> {
     const value: any = storage.getItem(key)
     try {
-      if (value === undefined) 
-        return ref(defaults)
+      if (value === undefined) return ref(defaults)
       const res = JSON.parse(value)
-      if (res?.data)
-        return ref(res.data)
+      if (res?.data) return ref(res.data)
       return ref(res)
     } catch (err: any) {
       console.error(err)
@@ -52,7 +66,10 @@ export function useStorage(storage: Storage = localStorage, defaults?: any):{[me
     }
   }
   function set(key: string, val: any): void {
-    storage.setItem(key, JSON.stringify({ type: typeof val, data: val, _t: new Date() }))
+    storage.setItem(
+      key,
+      JSON.stringify({ type: typeof val, data: val, _t: new Date() })
+    )
   }
   function remove(key: string | undefined) {
     if (!key) {
@@ -69,7 +86,7 @@ export function useStorage(storage: Storage = localStorage, defaults?: any):{[me
 }
 
 let accountInfo = reactive(storage.get('userMessage')?.value?.accountInfo || {})
-export function useAccount():[any, Function] {
+export function useAccount(): [any, Function] {
   if (!accountInfo?.account?.id && isLogin.value) {
     userApi.getAccount().then((res: any) => {
       accountInfo.account = res.account
@@ -79,7 +96,10 @@ export function useAccount():[any, Function] {
       })
     })
   }
-  return [accountInfo, (val: object) => {
-    accountInfo = reactive(Object.assign({}, accountInfo, val))
-  }]
+  return [
+    accountInfo,
+    (val: object) => {
+      accountInfo = reactive(Object.assign({}, accountInfo, val))
+    }
+  ]
 }

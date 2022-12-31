@@ -1,22 +1,28 @@
 <template>
   <div :class="['block_list', props.customClass ? props.customClass : '']">
-    <h4 class="sub_title">{{props.title}}</h4>
+    <h4 class="sub_title">{{ props.title }}</h4>
     <Splide class="list_squre" :options="props.options">
-      <SplideSlide class="squre_item" v-for="(item, index) in props.list" :key="index">
+      <SplideSlide
+        class="squre_item"
+        v-for="(item, index) in props.list"
+        :key="index"
+      >
         <div class="cover">
-          <span class="count"><icon-play-arrow class="parrow" /> {{nunberFmt(item)}}</span>
+          <span class="count"
+            ><icon-play-arrow class="parrow" /> {{ nunberFmt(item) }}</span
+          >
           <img class="cover_img" :src="item.picUrl" :alt="item.name" />
           <span class="hover">
             <icon-play-circle-fill class="playicon" />
           </span>
         </div>
-        <p class="description">{{item.name}}</p>
+        <p class="description">{{ item.name }}</p>
       </SplideSlide>
     </Splide>
   </div>
 </template>
 <script setup lang="ts">
-import {ref} from 'vue'
+import { ref } from 'vue'
 import { type Options } from '@splidejs/splide'
 type listIem = {
   id?: number
@@ -33,9 +39,10 @@ const props = defineProps<{
   list: listIem[]
 }>()
 
-function nunberFmt (item: listIem): string {
+function nunberFmt(item: listIem): string {
   console.log(item)
-  let res: string = (props.type === 'dj' ? item?.program?.listenerCount : item?.playCount) + ''
+  let res: string =
+    (props.type === 'dj' ? item?.program?.listenerCount : item?.playCount) + ''
   if (res.length > 5) {
     res = res.replace(/\d{4}$/, '万')
   }
@@ -43,7 +50,7 @@ function nunberFmt (item: listIem): string {
 }
 </script>
 <style lang="scss" scoped>
-h4.sub_title{
+h4.sub_title {
   font: {
     size: 18px;
     weight: normal;
@@ -57,17 +64,17 @@ h4.sub_title{
     .cover {
       position: relative;
       overflow: hidden;
-      transition: all .2s ease-in-out;
+      transition: all 0.2s ease-in-out;
       .count {
         position: absolute;
         right: 14px;
         bottom: 8px;
         padding: 4px 8px 6px;
         border-radius: 6px;
-        background: rgba(0, 0 , 0, .8);
+        background: rgba(0, 0, 0, 0.8);
         font-size: 10px;
         color: #fff;
-        .parrow{
+        .parrow {
           vertical-align: 0;
         }
       }
@@ -80,18 +87,18 @@ h4.sub_title{
         width: 100%;
         height: 100%;
         border-radius: 8px;
-        background-color: rgba(0, 0, 0, .6);
+        background-color: rgba(0, 0, 0, 0.6);
         text-align: center;
         line-height: 14rem;
         .playicon {
           font-size: 68px;
           color: #f2f2f2;
           width: 56px;
-          opacity: .8;
+          opacity: 0.8;
         }
       }
     }
-    .cover_img{
+    .cover_img {
       height: 11rem;
       border-radius: 8px;
     }
@@ -106,7 +113,7 @@ h4.sub_title{
         .hover {
           display: block;
         }
-      } 
+      }
     }
   }
   .description {
@@ -121,9 +128,9 @@ h4.sub_title{
     }
   }
 }
-.mvlist{
+.mvlist {
   height: 13.5rem;
-  .list_squre{
+  .list_squre {
     .cover_img {
       height: 8.5rem;
     }
