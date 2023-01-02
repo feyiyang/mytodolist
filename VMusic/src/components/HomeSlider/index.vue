@@ -6,6 +6,7 @@
         class="squre_item"
         v-for="(item, index) in props.list"
         :key="index"
+        @click="itemClick(item)"
       >
         <div class="cover">
           <span class="count"
@@ -17,12 +18,14 @@
           </span>
         </div>
         <p class="description">{{ item.name }}</p>
+        <p class="extra">{{ item?.artistName }}</p>
       </SplideSlide>
     </Splide>
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { type Options } from '@splidejs/splide'
 type listIem = {
   id?: number
@@ -31,22 +34,33 @@ type listIem = {
   playCount: number | string
   [key: string]: any
 }
+
+const router = useRouter()
 const props = defineProps<{
   title: string
-  type?: string
+  type: 'playlists' | 'dj' | 'mv'
   customClass?: string
   options?: Options
   list: listIem[]
 }>()
+const typeEnums: { [key: string]: (item: listIem) => void } = {
+  playlists(item) {
+    router.push({
+      path: `/playlists/${item?.id}`
+    })
+  }
+}
 
 function nunberFmt(item: listIem): string {
-  console.log(item)
   let res: string =
     (props.type === 'dj' ? item?.program?.listenerCount : item?.playCount) + ''
   if (res.length > 5) {
     res = res.replace(/\d{4}$/, '万')
   }
   return res
+}
+function itemClick(item: listIem) {
+  console.log(typeEnums[props?.type](item), props.type)
 }
 </script>
 <style lang="scss" scoped>
@@ -126,6 +140,11 @@ h4.sub_title {
     &:hover {
       color: $somegreen;
     }
+  }
+  .extra {
+    font-size: 10px;
+    color: $somegrey;
+    line-height: 1.6;
   }
 }
 .mvlist {

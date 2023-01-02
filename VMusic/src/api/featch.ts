@@ -68,27 +68,23 @@ export function http<T>(params: AxiosRequestConfig) {
   })
 }
 
-interface wrapInter {
-  [key: string]: () => Promise<any>
+interface funcInter {
+  [key: string]: (data?: any, alerts?: alertConfig) => Promise<any>
 }
 interface alertConfig {
   loadBar?: boolean
 }
-export function apiFunc(apiObj: apiInter): wrapInter {
+export function apiFunc(apiObj: apiInter): funcInter {
   const apiWrap = Object.create(null)
 
   for (const [key, cfg] of Object.entries(apiObj)) {
-    apiWrap[key] = function (data: object, alerts: alertConfig = {}) {
-      const { loadBar = false } = alerts
+    apiWrap[key] = (data?: any, alerts?: alertConfig) => {
       const params: AxiosRequestConfig = Object.assign({ method: 'get' }, cfg)
       params[params.method === 'post' ? 'data' : 'params'] = Object.assign(
         {},
         params.data,
         data
       )
-      // const res = http(params)
-      // console.log(res)
-      // return res
       return http(params)
     }
   }

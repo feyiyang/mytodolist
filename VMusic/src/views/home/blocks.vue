@@ -17,6 +17,7 @@
   <home-block
     title="推荐歌单"
     custom-class="personalized"
+    type="playlists"
     :options="listOptions"
     :list="personalized"
   ></home-block>
@@ -40,7 +41,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { songApi } from '@/api'
 import HomeBlock from '@/components/HomeSlider/index.vue'
-const homeBlocks = ref<any[]>([])
+// const homeBlocks = ref<any[]>([])
 const width = '100%'
 const gap = '1rem'
 const bannerOptions = reactive({

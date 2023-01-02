@@ -44,6 +44,10 @@ const song: apiInter = {
   // 推荐MV
   mvprogram: {
     url: '/personalized/mv'
+  },
+  // 歌单详情
+  playlistDetail: {
+    url: '/playlist/detail'
   }
 }
 

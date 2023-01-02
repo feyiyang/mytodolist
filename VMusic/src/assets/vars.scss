@@ -8,7 +8,14 @@ $somered: #cc9966;
 $somegreen: #17ce91;
 $somedark: #003300;
 $somelight: #cccc99;
+$linerGreen: 45deg, $mygreen 55%, $somegreen;
 
-$textligth: #9c9a9a;
+$textlight: #9c9a9a;
 
 $sidewidth: 150px;
+
+$containPadding: 0 40px;
+
+@mixin linerBg ($linerColor: $linerGreen) {
+  background-image: linear-gradient($linerColor);
+}

@@ -1,7 +1,7 @@
 import { Ref, ref, reactive } from 'vue'
 import { userApi } from '@/api'
 
-type useReturn = [any, Function, any?]
+type useReturn = [any, (arg1?: any, arg2?: any) => void, any?]
 
 const storage = useStorage()
 
@@ -52,7 +52,7 @@ export function useSpining(): useReturn {
 export function useStorage(
   storage: Storage = localStorage,
   defaults?: any
-): { [method: string]: Function } {
+): { [method: string]: (key: string, val?: any) => any } {
   function get(key: string): Ref<any> {
     const value: any = storage.getItem(key)
     try {

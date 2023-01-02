@@ -75,7 +75,7 @@ h3 {
   margin-bottom: 10px;
   font-size: 14px;
   font-weight: 500;
-  color: $textligth;
+  color: $textlight;
   text-indent: $indent;
 }
 #sidebar {
@@ -101,9 +101,8 @@ h3 {
       color: $mygreen;
     }
     &.active {
-      // background-color: $mygreen;
       color: #fff;
-      background-image: linear-gradient(45deg, $mygreen 55%, $somegreen);
+      @include linerBg;
     }
     img {
       height: 14px;
