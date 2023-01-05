@@ -5,7 +5,7 @@ import { Message } from '@arco-design/web-vue'
 // const controller = new AbortController() // controller.abort() 取消请求
 const instance: AxiosInstance = axios.create()
 instance.defaults.baseURL = '/api'
-instance.defaults.timeout = 2500
+instance.defaults.timeout = 5500
 instance.defaults.headers.common['Authorization'] = ''
 instance.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded'
@@ -16,7 +16,7 @@ instance.interceptors.request.use(
     // 在发送请求之前做些什么
     config.params = {
       ...config.params,
-      t: Date.now()
+      _t: Date.now()
     }
     if (config.data instanceof FormData) {
       Object.assign(config.headers, config.data.getHeaders())
@@ -51,6 +51,7 @@ export function http<T>(params: AxiosRequestConfig) {
   return new Promise<T>((resolve, reject) => {
     instance(params)
       .then((res: any) => {
+        res.success = res.code === 200
         if (res.code == 200) {
           resolve(res.result || res.data || res)
         } else {

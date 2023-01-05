@@ -33,7 +33,7 @@
       <p v-else>{{ profile.nickname }}</p>
     </div>
   </div>
-  <login-modal></login-modal>
+  <login-modal v-if="!profile?.userId"></login-modal>
 </template>
 <script setup lang="ts">
 import { Ref, ref } from 'vue'

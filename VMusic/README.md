@@ -25,7 +25,11 @@ src/assets/vars.scss 定义全局变量
 
 ### ui 框架
 
-[Ant Design Vue](https://www.antdv.com/docs/vue/introduce-cn)
+[Arco Design Vue](https://arco.design/vue/docs/start)
+
+### 参考
+
+[Web Audio](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Audio_API) [云 api](https://neteasecloudmusicapi-docs.4everland.app/#/)
 
 ### 结构
 

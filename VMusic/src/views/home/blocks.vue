@@ -39,7 +39,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { songApi } from '@/api'
+import { homeApi } from '@/api'
 import HomeBlock from '@/components/HomeSlider/index.vue'
 // const homeBlocks = ref<any[]>([])
 const width = '100%'
@@ -64,21 +64,21 @@ const djs = ref<any[]>([])
 const mvlist = ref<any[]>([])
 
 onMounted(async () => {
-  await songApi.banner().then((res: any) => {
+  await homeApi.banner().then((res: any) => {
     // console.log(res)
     banners.value = res.banners
   })
-  await songApi.personalized().then((res: any) => {
+  await homeApi.personalized().then((res: any) => {
     personalized.value = res
   })
-  await songApi.djprogram().then((res: any) => {
+  await homeApi.djprogram().then((res: any) => {
     djs.value = res
   })
-  await songApi.mvprogram().then((res: any) => {
+  await homeApi.mvprogram().then((res: any) => {
     mvlist.value = res
   })
 
-  // await songApi.homeBlocks().then((res: any) => {
+  // await homeApi.homeBlocks().then((res: any) => {
   //   const {blocks} = res
   //   homeBlocks.value.push(...blocks)
   // })

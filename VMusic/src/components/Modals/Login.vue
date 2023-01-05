@@ -92,7 +92,7 @@ const loginDisabled = computed<boolean>(() => {
   return !(formState.email && formState.password)
 })
 const qrimg = ref<string>('')
-const qrkey = ref<string>('')
+const qrkey = ref<string | null>(null)
 const qrstate = reactive<{ code?: number; message?: string }>({})
 
 !qrkey.value && getQrKey()

@@ -1,16 +1,15 @@
 <template>
-  <side-bar></side-bar>
+  <SideBar />
   <div id="main">
-    <top-bar></top-bar>
+    <TopBar />
     <div class="contain">
       <router-view></router-view>
     </div>
-    <div class="playbar"></div>
+    <PlayBar />
   </div>
 </template>
 <script setup lang="ts">
 import SideBar from './components/SideBar.vue'
 import TopBar from './components/TopBar.vue'
-import { useSpining } from './utils/hooks'
-const [spinning] = useSpining()
+import PlayBar from './components/PlayBar.vue'
 </script>

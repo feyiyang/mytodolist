@@ -1,10 +1,12 @@
-import { Ref, ref, reactive } from 'vue'
+import { Ref, ref, toRefs, reactive, watch } from 'vue'
 import { userApi } from '@/api'
+import { audioItem } from './types/playlist.type'
 
 type useReturn = [any, (arg1?: any, arg2?: any) => void, any?]
 
 const storage = useStorage()
 
+// 登录状态: boolean
 const isLogin = ref<boolean>(storage.get('isLogin') || false)
 export function useLoginState(): useReturn {
   return [
@@ -17,6 +19,7 @@ export function useLoginState(): useReturn {
   ]
 }
 
+// 用户信息
 let userInfo = reactive({})
 export function useUserInfo(): useReturn {
   return [
@@ -27,7 +30,8 @@ export function useUserInfo(): useReturn {
   ]
 }
 
-const modalVisibles: any = reactive({
+// 全局弹窗可见状态 key: boolean 形式
+const modalVisibles: { [key: string]: boolean } = reactive({
   login: false
 })
 export function useShowModals(): useReturn {
@@ -39,6 +43,7 @@ export function useShowModals(): useReturn {
   ]
 }
 
+// 全局加载状态
 const mainSpining = ref<boolean>(false)
 export function useSpining(): useReturn {
   return [
@@ -49,6 +54,7 @@ export function useSpining(): useReturn {
   ]
 }
 
+// Storage操作
 export function useStorage(
   storage: Storage = localStorage,
   defaults?: any
@@ -85,6 +91,7 @@ export function useStorage(
   }
 }
 
+// 账户信息
 let accountInfo = reactive(storage.get('userMessage')?.value?.accountInfo || {})
 export function useAccount(): [any, Function] {
   if (!accountInfo?.account?.id && isLogin.value) {
@@ -102,4 +109,36 @@ export function useAccount(): [any, Function] {
       accountInfo = reactive(Object.assign({}, accountInfo, val))
     }
   ]
+}
+
+// 播放器
+interface playerInt {
+  list: audioItem[]
+  current: audioItem | null | undefined
+  playing: boolean
+}
+const mainPlayer = reactive<playerInt>({
+  list: [],
+  current: null,
+  playing: false
+})
+let playerWatchStops: { [key: string]: () => void } = Object.create(null)
+export function usePlayer(): {
+  player: playerInt
+  playerSubs: (name: keyof playerInt, callBack: (cur: any, pre?: any) => void) => void
+} {
+  const player = mainPlayer
+  const playerRefs = toRefs(player)
+  const ret = {
+    player,
+    playerSubs(keyName: keyof playerInt, cb: (cur: any, pre?: any) => void) {
+      // let val = toRef(player, name)
+      playerWatchStops[keyName] && playerWatchStops[keyName]()
+      playerWatchStops[keyName] = watch(playerRefs[keyName], (val, pre) => {
+        cb(val, pre)
+      })
+    },
+    playerWatchStops
+  }
+  return ret
 }

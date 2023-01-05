@@ -12,44 +12,46 @@ const search: apiInter = {
   }
 }
 
+// 歌曲
 const song: apiInter = {
-  banner: {
-    url: '/banner'
-  },
   detail: {
     url: '/song/detail'
-  },
-  homeBlocks: {
-    url: '/homepage/block/page'
   },
   // 每日推荐歌单 (登录)
   recommendList: {
     url: '/recommend/resource'
   },
-  // 推荐歌单
-  personalized: {
-    url: '/personalized',
+  // 音乐url
+  getUrl: {
+    url: '/song/url/v1'
+  }
+}
+
+// 歌单
+const songs: apiInter = {
+  // 热门评论
+  commentHot: {
+    url: '/comment/hot'
+  },
+  // 歌单评论
+  commentList: {
+    url: '/comment/playlist',
     data: {
-      limit: 8
+      limit: 60
+      // 必选参数 : id: 歌单 id
+      // offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
     }
-  },
-  // 推荐电台
-  djprogram: {
-    url: '/personalized/djprogram'
-  },
-  // 推荐电台
-  djrecommend: {
-    url: '/program/recommend'
-  },
-  // 推荐MV
-  mvprogram: {
-    url: '/personalized/mv'
   },
   // 歌单详情
   playlistDetail: {
     url: '/playlist/detail'
+  },
+  // 歌单所有歌曲
+  trackAll: {
+    url: '/playlist/track/all'
   }
 }
 
 export const searchApi = apiFunc(search)
 export const songApi = apiFunc(song)
+export const songsApi = apiFunc(songs)
