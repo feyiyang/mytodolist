@@ -27,6 +27,9 @@ export interface audioItem {
   id: number
   url: string
   name: string
+  queueIndex?: number
+  al?: any
+  ar?: any
 }
 
 export interface commentItem {
@@ -37,4 +40,11 @@ export interface commentItem {
   likedCount: number
   timeStr: string
   user: any
+}
+
+export interface playMethod {
+  name?: string
+  icon?: string
+  type: number
+  end: () => void
 }

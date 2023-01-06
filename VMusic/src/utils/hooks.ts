@@ -114,12 +114,12 @@ export function useAccount(): [any, Function] {
 // 播放器
 interface playerInt {
   list: audioItem[]
-  current: audioItem | null | undefined
+  current: audioItem & object
   playing: boolean
 }
 const mainPlayer = reactive<playerInt>({
   list: [],
-  current: null,
+  current: Object.create(null),
   playing: false
 })
 let playerWatchStops: { [key: string]: () => void } = Object.create(null)
@@ -137,6 +137,7 @@ export function usePlayer(): {
       playerWatchStops[keyName] = watch(playerRefs[keyName], (val, pre) => {
         cb(val, pre)
       })
+      return playerWatchStops[keyName]
     },
     playerWatchStops
   }

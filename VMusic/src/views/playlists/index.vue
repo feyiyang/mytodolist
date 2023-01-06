@@ -29,7 +29,7 @@
             </span>
           </div>
           <div class="btns">
-            <a-button class="btn_play" size="small" @click="playAll"
+            <a-button class="btn_play" size="small" @click="playSongHandler()"
               >播放全部</a-button
             >
           </div>
@@ -45,7 +45,7 @@
         </a-col>
       </a-row>
       <a-tabs
-        v-if="details && songs?.length"
+        v-if="details"
         default-active-key="1"
         :tabBarGutter="40"
         :headerPadding="false"
@@ -70,6 +70,7 @@
               v-for="(song, index) in songs"
               :key="index"
               class="song_item"
+              :class="song.id === playsongs.current?.id ? 'current_item' : ''"
             >
               <a-row>
                 <a-col
@@ -78,7 +79,7 @@
                   :title="song.name + ' ' + song.alia.join(' ')"
                 >
                   &nbsp;
-                  <icon-play-arrow />
+                  <icon-play-arrow @click="playSongHandler(index)" />
                   <span class="name">
                     {{ song.name }}
                   </span>
@@ -193,6 +194,7 @@ import { useRoute } from 'vue-router'
 import { type ScrollbarInstance } from '@arco-design/web-vue'
 import { songApi, songsApi } from '@/api'
 import { usePlayer } from '@/utils/hooks'
+import { longFmt } from '@/utils'
 import {
   playlistDetailInt,
   trackIds,
@@ -269,7 +271,6 @@ function getDetails() {
       return songsApi.trackAll({ id: route.params.id })
     })
     .then((res: resInt) => {
-      console.log(res)
       songs.value = res.songs
       loadList.value = false
     })
@@ -289,7 +290,6 @@ function getComments(init: boolean = true) {
   init && songsApi
     .commentList({ id: route.params.id, offset: (curPage.value - 1) * 60 })
     .then((res: any) => {
-      console.log(res)
       if (res.code === 200) {
         newComments.value = res.comments
       }
@@ -304,21 +304,9 @@ function pageChg(n: number) {
     scrollbarElem.value?.scrollTop(posy)
   })
 }
-function longFmt(val: number): string {
-  let res = ''
-  const seconds = Math.floor(val / 1000)
-  let minStr: string = seconds > 60 ? Math.floor(seconds / 60).toString() : '00'
-  let secondStr: string = (seconds % 60) + ''
-  res = subVal(minStr) + ':' + subVal(secondStr)
-  return res
-}
-function subVal(v: string): string {
-  return '00'.substring(v.length) + v
-}
-function playAll(): void {
-  // setPlayer({ list: songs.value })
+function playSongHandler(n?: number): void {
   playsongs.list = songs.value
-  playsongs.current = songs.value[0]
+  playsongs.current = { queueIndex: n, ...songs.value[n || 0]}
   playsongs.playing = true
 }
 </script>
@@ -385,6 +373,9 @@ function playAll(): void {
     color: #666;
     white-space: nowrap;
     padding: 10px 0 !important;
+    &.current_item {
+      color: $mygreen;
+    }
     :deep(.arco-col) {
       padding-right: 10px;
       overflow: hidden;
