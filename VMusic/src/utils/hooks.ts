@@ -93,7 +93,7 @@ export function useStorage(
 
 // 账户信息
 let accountInfo = reactive(storage.get('userMessage')?.value?.accountInfo || {})
-export function useAccount(): [any, Function] {
+export function useAccount(): [any, (val: object) => void] {
   if (!accountInfo?.account?.id && isLogin.value) {
     userApi.getAccount().then((res: any) => {
       accountInfo.account = res.account
@@ -122,10 +122,13 @@ const mainPlayer = reactive<playerInt>({
   current: Object.create(null),
   playing: false
 })
-let playerWatchStops: { [key: string]: () => void } = Object.create(null)
+const playerWatchStops: { [key: string]: () => void } = Object.create(null)
 export function usePlayer(): {
   player: playerInt
-  playerSubs: (name: keyof playerInt, callBack: (cur: any, pre?: any) => void) => void
+  playerSubs: (
+    name: keyof playerInt,
+    callBack: (cur: any, pre?: any) => void
+  ) => void
 } {
   const player = mainPlayer
   const playerRefs = toRefs(player)
@@ -133,7 +136,7 @@ export function usePlayer(): {
     player,
     playerSubs(keyName: keyof playerInt, cb: (cur: any, pre?: any) => void) {
       // let val = toRef(player, name)
-      playerWatchStops[keyName] && playerWatchStops[keyName]()
+      // playerWatchStops[keyName] && playerWatchStops[keyName]()
       playerWatchStops[keyName] = watch(playerRefs[keyName], (val, pre) => {
         cb(val, pre)
       })

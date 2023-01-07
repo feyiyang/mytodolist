@@ -28,7 +28,8 @@ const tabs = ref([
   { key: '1', path: '/blocks', name: '精选' },
   { key: '2', path: '/stations', name: '有声电台' },
   { key: '3', path: '/ranks', name: '排行榜' },
-  { key: '4', path: '/singers', name: '歌手' }
+  { key: '4', path: '/singers', name: '歌手' },
+  { key: '5', path: '/allist', name: '分类歌单' }
 ])
 </script>
 <style lang="scss" scoped>

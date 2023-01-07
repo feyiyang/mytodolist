@@ -79,7 +79,10 @@
                   :title="song.name + ' ' + song.alia.join(' ')"
                 >
                   &nbsp;
-                  <icon-play-arrow @click="playSongHandler(index)" />
+                  <icon-play-arrow
+                    class="play_arrow"
+                    @click="playSongHandler(index)"
+                  />
                   <span class="name">
                     {{ song.name }}
                   </span>
@@ -88,12 +91,12 @@
                   </span>
                   <span class="fee" v-if="song.fee == 1"> VIP </span>
                 </a-col>
-                <a-col :span="5">
+                <a-col class="songers" :span="5">
                   <template v-for="(ar, ind) in song.ar" :key="ind">
                     {{ ar.name }}<i v-if="ind < song.ar.length - 1">/</i>
                   </template>
                 </a-col>
-                <a-col :span="5" :title="song.al.name">{{
+                <a-col class="album" :span="5" :title="song.al.name">{{
                   song.al.name
                 }}</a-col>
                 <a-col :span="2">{{ longFmt(song.dt) }}</a-col>
@@ -155,7 +158,8 @@
               :datetime="comment.timeStr"
             >
               <template #actions>
-                <icon-thumb-up /> {{ comment.likedCount ? comment.likedCount : '' }}
+                <icon-thumb-up />
+                {{ comment.likedCount ? comment.likedCount : '' }}
               </template>
               <div v-if="comment.beReplied.length" class="comment_inner">
                 <template v-for="(rep, ind) in comment.beReplied" :key="ind">
@@ -197,7 +201,7 @@ import { usePlayer } from '@/utils/hooks'
 import { longFmt } from '@/utils'
 import {
   playlistDetailInt,
-  trackIds,
+  trackIdsInt,
   audioItem,
   commentItem
 } from '@/utils/types/playlist.type'
@@ -213,12 +217,12 @@ const route = useRoute()
 const { player: playsongs } = usePlayer() // 播放器playbar
 const scrollbarElem = ref<ScrollbarInstance>()
 const details = ref<playlistDetailInt | null>(null) // 歌单信息
-const loading = ref<boolean>(true)  // 信息加载
-const loadList = ref<boolean>(false)  // 歌曲列表加载状态
-const showMore = ref<boolean>(false)  // 更多精彩评论
+const loading = ref<boolean>(true) // 信息加载
+const loadList = ref<boolean>(false) // 歌曲列表加载状态
+const showMore = ref<boolean>(false) // 更多精彩评论
 const dataError = ref<boolean>(false) // 获取数据错误
-const trackIds = ref<trackIds[]>([])  // 歌曲id集合
-const songs = ref<any[]>([])  // 歌曲列表
+const trackIds = ref<trackIdsInt[]>([]) // 歌曲id集合
+const songs = ref<any[]>([]) // 歌曲列表
 let curIds: number[] = [] // 歌曲id集合
 const curPage = ref<number>(1)
 // let totalPage: number = 1
@@ -279,15 +283,17 @@ function getDetails() {
       dataError.value = true
     })
 }
-function getComments(init: boolean = true) {
+function getComments(init = true) {
+  console.log(init)
   !hotComments.value.length &&
-  init && 
+    init &&
     songsApi.commentHot({ id: route.params.id, type: 2 }).then((res: any) => {
       if (res.code === 200) {
         hotComments.value = res.hotComments
       }
     })
-  init && songsApi
+  // if (!newComments.value.length && init) return
+  songsApi
     .commentList({ id: route.params.id, offset: (curPage.value - 1) * 60 })
     .then((res: any) => {
       if (res.code === 200) {
@@ -305,8 +311,9 @@ function pageChg(n: number) {
   })
 }
 function playSongHandler(n?: number): void {
+  console.log(n)
   playsongs.list = songs.value
-  playsongs.current = { queueIndex: n, ...songs.value[n || 0]}
+  playsongs.current = { queueIndex: n, ...songs.value[n || 0] }
   playsongs.playing = true
 }
 </script>
@@ -371,27 +378,43 @@ function playSongHandler(n?: number): void {
   }
   .song_item {
     color: #666;
-    white-space: nowrap;
     padding: 10px 0 !important;
+    white-space: nowrap;
     &.current_item {
       color: $mygreen;
     }
-    :deep(.arco-col) {
-      padding-right: 10px;
+    .songers,
+    .album {
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    :deep(.arco-col) {
+      padding-right: 10px;
       &:last-of-type {
         padding: 0;
       }
     }
   }
   .names {
-    display: flex;
-    align-items: center;
+    // display: flex;
+    // justify-content: flex-start;
+    // align-items: center;
+    overflow: hidden;
+    > * {
+      vertical-align: middle;
+    }
     .name {
       display: inline-block;
       margin-left: 5px;
-      vertical-align: -2px;
+      flex-shrink: 1;
+      // vertical-align: -2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .extra {
+      display: inline-block;
+      flex-shrink: 2;
       overflow: hidden;
       text-overflow: ellipsis;
     }

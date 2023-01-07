@@ -14,11 +14,11 @@ export interface playlistDetailInt {
   subscribers: Array<any>
   tags: Array<string>
   tracks: Array<object>
-  trackIds: trackIds[]
+  trackIds: trackIdsInt[]
   updateTime: number
 }
 
-export interface trackIds {
+export interface trackIdsInt {
   id: number
   uid: number
 }

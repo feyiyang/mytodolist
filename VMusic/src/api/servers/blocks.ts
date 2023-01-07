@@ -29,6 +29,10 @@ const home: apiInter = {
   // 推荐MV
   mvprogram: {
     url: '/personalized/mv'
+  },
+  // 推荐新音乐
+  newsong: {
+    url: '/personalized/newsong'
   }
 }
 
