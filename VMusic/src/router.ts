@@ -23,6 +23,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/playlists/index.vue')
   },
   {
+    path: '/song/detail/:id',
+    component: () => import('@/views/song/detail.vue')
+  },
+  {
     path: '/mv',
     component: () => import('@/views/Mv.vue')
   },

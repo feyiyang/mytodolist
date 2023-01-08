@@ -16,14 +16,14 @@
   </Splide>
   <home-block
     title="推荐歌单"
-    custom-class="personalized"
+    class="personalized"
     type="playlists"
     :options="listOptions"
     :list="personalized"
   ></home-block>
   <home-block
     title="推荐有声电台"
-    custom-class="djlist"
+    class="djlist"
     type="dj"
     :countKey="'program.listenerCount'"
     :options="listOptions"
@@ -31,11 +31,33 @@
   ></home-block>
   <home-block
     title="推荐视频"
-    custom-class="mvlist"
+    class="mvlist"
     type="mv"
-    :options="{ perPage: 3, gap: '1rem', autoWidth: true }"
+    :options="{ perPage: 3, gap: '1rem' }"
     :list="mvlist"
   ></home-block>
+  <home-block
+    title="最新发行"
+    class="newsonglist"
+    type="newsong"
+    :options="listOptions"
+    :list="newsong"
+  >
+    <template v-slot="{ item, clickfn }">
+      <div class="cover" @click.stop="clickfn.newsong(item, true)">
+        <img class="cover_img" :src="item.picUrl" :alt="item.name" />
+        <span class="hover">
+          <icon-play-circle-fill class="playicon" />
+        </span>
+      </div>
+      <p class="description">{{ item.name }}</p>
+      <p class="extra">
+        <span class="er" v-for="(er, ind) in item.song.artists" :key="ind">
+          {{ er.name }}
+        </span>
+      </p>
+    </template>
+  </home-block>
 </template>
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
@@ -53,6 +75,7 @@ const bannerOptions = reactive({
 })
 const listOptions = reactive({
   lazyLoad: true,
+  pagination: false,
   perPage: 4,
   width,
   fixedHeight: '15rem',
@@ -62,6 +85,7 @@ const banners = ref<any[]>([])
 const personalized = ref<any[]>([])
 const djs = ref<any[]>([])
 const mvlist = ref<any[]>([])
+const newsong = ref<any[]>([])
 
 onMounted(async () => {
   await homeApi.banner().then((res: any) => {
@@ -71,17 +95,15 @@ onMounted(async () => {
   await homeApi.personalized().then((res: any) => {
     personalized.value = res
   })
-  await homeApi.djprogram().then((res: any) => {
+  homeApi.djprogram().then((res: any) => {
     djs.value = res
   })
   await homeApi.mvprogram().then((res: any) => {
     mvlist.value = res
   })
-
-  // await homeApi.homeBlocks().then((res: any) => {
-  //   const {blocks} = res
-  //   homeBlocks.value.push(...blocks)
-  // })
+  homeApi.newsong().then((res: any) => {
+    newsong.value = res
+  })
 })
 
 function bannerClick(banner: any): void {
@@ -128,6 +150,97 @@ function bannerClick(banner: any): void {
   }
   .splide__arrow--next {
     right: -1.6rem;
+  }
+}
+</style>
+
+<style lang="scss">
+.home_block_list {
+  height: 18rem;
+  .list_squre {
+    .cover {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease-in-out;
+      .count {
+        position: absolute;
+        right: 14px;
+        bottom: 8px;
+        padding: 4px 8px 6px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.8);
+        font-size: 10px;
+        color: #fff;
+        .parrow {
+          vertical-align: 0;
+        }
+      }
+      .hover {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        background-color: rgba(0, 0, 0, 0.6);
+        text-align: center;
+        line-height: 14rem;
+        .playicon {
+          font-size: 68px;
+          color: #f2f2f2;
+          width: 56px;
+          opacity: 0.8;
+        }
+      }
+    }
+    .cover_img {
+      height: 11rem;
+      border-radius: 8px;
+    }
+    .squre_item {
+      display: flex;
+      flex-flow: column;
+      padding-top: 6px;
+      cursor: pointer;
+      .cover:hover {
+        transform: translateY(-6px);
+        .count {
+          display: none;
+        }
+        .hover {
+          display: block;
+        }
+      }
+    }
+  }
+  .description {
+    padding: 8px 0 0 0;
+    line-height: 1.4;
+    max-height: 2.8em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 2;
+    &:hover {
+      color: $somegreen;
+    }
+  }
+  .extra {
+    font-size: 10px;
+    color: $textlight;
+    line-height: 1.6;
+    .er:not(:last-of-type):after {
+      content: '/';
+    }
+  }
+  &.mvlist {
+    height: 16rem;
+    .list_squre {
+      .cover_img {
+        height: 8.5rem;
+      }
+    }
   }
 }
 </style>

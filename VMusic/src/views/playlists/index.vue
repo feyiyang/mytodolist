@@ -85,9 +85,9 @@
                   />
                   <span class="name">
                     {{ song.name }}
-                  </span>
-                  <span class="extra" v-if="song.alia.length">
-                    ({{ song.alia.join(',') }})
+                    <span class="extra" v-if="song.alia.length">
+                      ({{ song.alia.join(',') }})
+                    </span>
                   </span>
                   <span class="fee" v-if="song.fee == 1"> VIP </span>
                 </a-col>
@@ -284,7 +284,6 @@ function getDetails() {
     })
 }
 function getComments(init = true) {
-  console.log(init)
   !hotComments.value.length &&
     init &&
     songsApi.commentHot({ id: route.params.id, type: 2 }).then((res: any) => {
@@ -311,7 +310,6 @@ function pageChg(n: number) {
   })
 }
 function playSongHandler(n?: number): void {
-  console.log(n)
   playsongs.list = songs.value
   playsongs.current = { queueIndex: n, ...songs.value[n || 0] }
   playsongs.playing = true
@@ -379,7 +377,6 @@ function playSongHandler(n?: number): void {
   .song_item {
     color: #666;
     padding: 10px 0 !important;
-    white-space: nowrap;
     &.current_item {
       color: $mygreen;
     }
@@ -389,32 +386,33 @@ function playSongHandler(n?: number): void {
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    :deep(.arco-col) {
-      padding-right: 10px;
-      &:last-of-type {
-        padding: 0;
+    :deep(.arco-list-item-main) {
+      width: 100%;
+      .arco-col {
+        padding-right: 10px;
+        &:last-of-type {
+          padding: 0;
+        }
       }
     }
   }
   .names {
-    // display: flex;
-    // justify-content: flex-start;
-    // align-items: center;
     overflow: hidden;
+    text-overflow: ellipsis;
     > * {
       vertical-align: middle;
     }
     .name {
       display: inline-block;
       margin-left: 5px;
-      flex-shrink: 1;
-      // vertical-align: -2px;
+      max-width: 85%;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .extra {
       display: inline-block;
-      flex-shrink: 2;
+      vertical-align: middle;
       overflow: hidden;
       text-overflow: ellipsis;
     }

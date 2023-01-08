@@ -15,7 +15,7 @@ const home: apiInter = {
   personalized: {
     url: '/personalized',
     data: {
-      limit: 8
+      limit: 12
     }
   },
   // 推荐电台

@@ -25,11 +25,12 @@ export interface trackIdsInt {
 
 export interface audioItem {
   id: number
-  url: string
+  url?: string
   name: string
   queueIndex?: number
-  al?: any
-  ar?: any
+  dt?: number // 时长
+  al?: any // 专辑封面， 名字
+  ar?: any // 歌手
 }
 
 export interface commentItem {

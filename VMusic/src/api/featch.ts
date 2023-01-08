@@ -50,8 +50,11 @@ export interface apiInter {
 export function http<T>(params: AxiosRequestConfig) {
   return new Promise<T>((resolve, reject) => {
     instance(params)
-      .then((res: any) => {
-        res.success = res.code === 200
+      .then((result: any) => {
+        const res: any = {
+          success: result.code === 200,
+          ...result
+        }
         if (res.code == 200) {
           resolve(res.result || res.data || res)
         } else {

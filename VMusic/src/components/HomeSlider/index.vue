@@ -1,5 +1,5 @@
 <template>
-  <div :class="['block_list', props.customClass ? props.customClass : '']">
+  <div :class="['home_block_list', props.customClass ? props.customClass : '']">
     <h4 class="sub_title">{{ props.title }}</h4>
     <Splide class="list_squre" :options="props.options">
       <SplideSlide
@@ -8,29 +8,33 @@
         :key="index"
         @click="itemClick(item)"
       >
-        <div class="cover">
-          <span class="count"
-            ><icon-play-arrow class="parrow" /> {{ nunberFmt(item) }}</span
-          >
-          <img class="cover_img" :src="item.picUrl" :alt="item.name" />
-          <span class="hover">
-            <icon-play-circle-fill class="playicon" />
-          </span>
-        </div>
-        <p class="description">{{ item.name }}</p>
-        <p class="extra">{{ item?.artistName }}</p>
+        <slot :item="item" :clickfn="typeEnums" class="slotttt"></slot>
+        <template v-if="!$slots.default">
+          <div class="cover">
+            <span class="count"
+              ><icon-play-arrow class="parrow" /> {{ nunberFmt(item) }}</span
+            >
+            <img class="cover_img" :src="item.picUrl" :alt="item.name" />
+            <span class="hover">
+              <icon-play-circle-fill class="playicon" />
+            </span>
+          </div>
+          <p class="description">{{ item.name }}</p>
+          <p class="extra">{{ item?.artistName }}</p>
+        </template>
       </SplideSlide>
     </Splide>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { type Options } from '@splidejs/splide'
-type listIem = {
-  id?: number
+import { usePlayer } from '@/utils/hooks'
+type listItem = {
+  id: number
   picUrl?: string
-  name?: string
+  name: string
   playCount: number | string
   [key: string]: any
 }
@@ -38,20 +42,41 @@ type listIem = {
 const router = useRouter()
 const props = defineProps<{
   title: string
-  type: 'playlists' | 'dj' | 'mv'
+  type: 'playlists' | 'dj' | 'mv' | 'newsong'
   customClass?: string
   options?: Options
-  list: listIem[]
+  list: listItem[]
 }>()
-const typeEnums: { [key: string]: (item: listIem) => void } = {
+const { player: playsongs } = usePlayer()
+const { list: queue, current: songInfo, playing: onPlay } = toRefs(playsongs)
+const typeEnums: {
+  [key: string]: (item: listItem, isCover?: boolean) => void
+} = {
   playlists(item) {
     router.push({
       path: `/playlists/${item?.id}`
     })
+  },
+  newsong(item, isCover) {
+    console.log(item, isCover)
+    if (isCover) {
+      const song = {
+        name: item.name,
+        id: item.id,
+        ar: item.song.artists,
+        al: item.song.album,
+        dt: item.song.duration
+      }
+      queue.value = [song]
+      songInfo.value = song
+    }
+    // router.push({
+    //   path: `/song/detail/${item.id}`
+    // })
   }
 }
 
-function nunberFmt(item: listIem): string {
+function nunberFmt(item: listItem): string {
   let res: string =
     (props.type === 'dj' ? item?.program?.listenerCount : item?.playCount) + ''
   if (res.length > 5) {
@@ -59,8 +84,10 @@ function nunberFmt(item: listIem): string {
   }
   return res
 }
-function itemClick(item: listIem) {
-  console.log(typeEnums[props?.type](item), props.type)
+function itemClick(item: listItem, isCover = false) {
+  if (typeEnums[props?.type]) {
+    typeEnums[props?.type](item, isCover)
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -70,89 +97,5 @@ h4.sub_title {
     weight: normal;
   }
   padding: 10px 0 10px;
-}
-
-.block_list {
-  height: 18rem;
-  .list_squre {
-    .cover {
-      position: relative;
-      overflow: hidden;
-      transition: all 0.2s ease-in-out;
-      .count {
-        position: absolute;
-        right: 14px;
-        bottom: 8px;
-        padding: 4px 8px 6px;
-        border-radius: 6px;
-        background: rgba(0, 0, 0, 0.8);
-        font-size: 10px;
-        color: #fff;
-        .parrow {
-          vertical-align: 0;
-        }
-      }
-      .hover {
-        display: none;
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: 2;
-        width: 100%;
-        height: 100%;
-        border-radius: 8px;
-        background-color: rgba(0, 0, 0, 0.6);
-        text-align: center;
-        line-height: 14rem;
-        .playicon {
-          font-size: 68px;
-          color: #f2f2f2;
-          width: 56px;
-          opacity: 0.8;
-        }
-      }
-    }
-    .cover_img {
-      height: 11rem;
-      border-radius: 8px;
-    }
-    .squre_item {
-      padding-top: 6px;
-      cursor: pointer;
-      .cover:hover {
-        transform: translateY(-6px);
-        .count {
-          display: none;
-        }
-        .hover {
-          display: block;
-        }
-      }
-    }
-  }
-  .description {
-    padding: 8px 0 0 0;
-    line-height: 1.4;
-    max-height: 2.8em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-clamp: 2;
-    &:hover {
-      color: $somegreen;
-    }
-  }
-  .extra {
-    font-size: 10px;
-    color: $somegrey;
-    line-height: 1.6;
-  }
-}
-.mvlist {
-  height: 13.5rem;
-  .list_squre {
-    .cover_img {
-      height: 8.5rem;
-    }
-  }
 }
 </style>
