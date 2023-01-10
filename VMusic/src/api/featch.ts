@@ -4,7 +4,7 @@ import { Message } from '@arco-design/web-vue'
 /*-----  axios实例 START  ----*/
 // const controller = new AbortController() // controller.abort() 取消请求
 const instance: AxiosInstance = axios.create()
-instance.defaults.baseURL = '/api'
+instance.defaults.baseURL = '/api/.netlify/functions/cld/cld'
 instance.defaults.timeout = 5500
 instance.defaults.headers.common['Authorization'] = ''
 instance.defaults.headers.post['Content-Type'] =
@@ -21,6 +21,7 @@ instance.interceptors.request.use(
     if (config.data instanceof FormData) {
       Object.assign(config.headers, config.data.getHeaders())
     }
+    config.url = ''
     return config
   },
   (error) => {
@@ -83,9 +84,11 @@ export function apiFunc(apiObj: apiInter): funcInter {
 
   for (const [key, cfg] of Object.entries(apiObj)) {
     apiWrap[key] = (data?: any, alerts?: alertConfig) => {
-      const params: AxiosRequestConfig = Object.assign({ method: 'get' }, cfg)
+      const params: AxiosRequestConfig = Object.assign({ method: 'post' }, cfg)
       params[params.method === 'post' ? 'data' : 'params'] = Object.assign(
-        {},
+        {
+          queryPath: cfg.url
+        },
         params.data,
         data
       )

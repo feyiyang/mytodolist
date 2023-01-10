@@ -3,7 +3,7 @@
     <div class="songplay">
       <a-image
         class="cover"
-        :src="songInfo.al?.picUrl || 'src/assets/img/emty_default.svg'"
+        :src="songInfo.al?.picUrl || emptyImg"
         :preview="false"
         fit="fill"
       />
@@ -127,6 +127,7 @@ import { usePlayer } from '@/utils/hooks'
 import { audioItem, playMethod } from '@/utils/types/playlist.type'
 import { songApi } from '@/api'
 import { longFmt } from '@/utils/index'
+import emptyImg from '@/assets/img/emty_default.svg'
 
 const audioElem = ref<HTMLAudioElement>()
 const IconFont = Icon.addFromIconFontCn({

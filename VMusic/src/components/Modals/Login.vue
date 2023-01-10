@@ -7,6 +7,7 @@
     title=" "
     title-align="start"
     :footer="false"
+    @close="closeModel"
   >
     <template #title>
       <a-tabs
@@ -153,8 +154,14 @@ function qrCheck(): void {
     })
 }
 function tabChange(val: any) {
+  clearTimeout(checkTimer)
   const isqr: boolean = val == '2'
-  isqr && !qrimg.value && getQrImg()
+  if (isqr) {
+    qrimg.value ? qrCheck() : getQrImg()
+  }
+}
+function closeModel() {
+  clearTimeout(checkTimer)
 }
 </script>
 <style lang="scss" scoped>

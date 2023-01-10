@@ -1,13 +1,16 @@
-import { defineConfig } from 'vite'
+import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), splitVendorChunkPlugin()],
   resolve: {
     alias: {
       '@': '/src'
     }
+  },
+  build: {
+    assetsInlineLimit: 2048
   },
   css: {
     preprocessorOptions: {
@@ -32,7 +35,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://music-player-server.immortalboy.cn',
+        // target: 'https://music-player-server.immortalboy.cn',
+        target: 'http://127.0.0.1:8888',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
