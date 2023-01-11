@@ -5,7 +5,7 @@ import { Message } from '@arco-design/web-vue'
 // const controller = new AbortController() // controller.abort() 取消请求
 const isdev = location.href.indexOf('netlify.app') < 0
 const instance: AxiosInstance = axios.create()
-instance.defaults.baseURL = (isdev ? '' : '/api') + '/.netlify/functions/cld/cld'
+instance.defaults.baseURL = (isdev ? '' : '') + '/.netlify/functions/cld/cld'
 instance.defaults.timeout = 5500
 instance.defaults.headers.common['Authorization'] = ''
 instance.defaults.headers.post['Content-Type'] =
