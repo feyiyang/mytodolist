@@ -15,7 +15,6 @@ exports.handler = function(event, context, callback) {
   try {
     let bodydata = querystring.parse(event.body)
     let queryPath = bodydata.queryPath
-    console.log(typeof bodydata)
     let retdata = ''
     const options = {
       hostname: 'music-player-server.immortalboy.cn',
@@ -25,7 +24,9 @@ exports.handler = function(event, context, callback) {
         'Content-Type': 'application/json'
       }
     }
+    delete bodydata.queryPath
     const req = https.request(options, (res) => {
+      console.log(bodydata)
       console.log(`状态码: ${res.statusCode}`);
       // console.log(`响应头: ${JSON.stringify(res.headers)}`);
       res.setEncoding('utf8');
@@ -69,7 +70,6 @@ exports.handler = function(event, context, callback) {
     req.on('error', (e) => {
       console.error(e);
     });
-    delete bodydata.queryPath
     req.write(JSON.stringify(bodydata))
     req.end()
   } catch(err) {

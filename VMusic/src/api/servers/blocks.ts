@@ -36,4 +36,16 @@ const home: apiInter = {
   }
 }
 
+const toplists: apiInter = {
+  // 所有榜单
+  list: {
+    url: '/toplist'
+  },
+  // 所有榜单内容摘要
+  about: {
+    url: '/toplist/detail'
+  }
+}
+
 export const homeApi = apiFunc(home)
+export const topsApi = apiFunc(toplists)

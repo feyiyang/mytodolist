@@ -12,25 +12,38 @@
         size="small"
         :tabBarGutter="20"
         :headerPadding="false"
+        @tab-click="tabChg"
       >
-        <a-tab-pane v-for="item in tabs" :key="item.key" :title="item.name">
+        <a-tab-pane v-for="(item, key) of tabs" :key="key" :title="item.name">
         </a-tab-pane>
       </a-tabs>
-      <router-view></router-view>
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component"></component>
+        </keep-alive>
+      </router-view>
     </div>
   </a-scrollbar>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
-const activeKey = ref<string>('1')
-const tabs = ref([
-  { key: '1', path: '/blocks', name: '精选' },
-  { key: '2', path: '/stations', name: '有声电台' },
-  { key: '3', path: '/ranks', name: '排行榜' },
-  { key: '4', path: '/singers', name: '歌手' },
-  { key: '5', path: '/allist', name: '分类歌单' }
-])
+const router = useRouter()
+const route = useRoute()
+console.log(route)
+const tabs = reactive<{ [key: string]: { alias?: string[], name: string } }>({
+  '/': { name: '精选', alias: ['/'] },
+  // '/stations': { name: '有声电台' },
+  '/toplists': { name: '排行榜' },
+  '/singers': { name: '歌手' },
+  '/allist': { name: '分类歌单' }
+})
+const activeKey = ref<string>(tabs[route.path] ? route.path : '/')
+
+function tabChg(key: string | number) {
+  router.push(key as string)
+}
 </script>
 <style lang="scss" scoped>
 .home {
