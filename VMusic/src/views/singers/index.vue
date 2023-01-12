@@ -1,27 +1,47 @@
 <template>
-  <div class="types" :class="`types_${index}`" v-for="(type, index) in types" :key="index">
+  <div
+    class="types"
+    :class="`types_${index}`"
+    v-for="(type, index) in types"
+    :key="index"
+  >
     <span class="name">{{ type.value }}: </span>
     <ul class="items">
-      <li class="item" v-for="(item, ind) in type.list" :key="ind" @click="typeChg(type, ind)">
-        <span class="val" :class="{'active': ind === currentTypes[type.name]}">{{ item.value }}</span>
+      <li
+        class="item"
+        v-for="(item, ind) in type.list"
+        :key="ind"
+        @click="typeChg(type, ind)"
+      >
+        <span
+          class="val"
+          :class="{ active: ind === currentTypes[type.name] }"
+          >{{ item.value }}</span
+        >
       </li>
     </ul>
   </div>
   <ul class="slist">
     <li class="sitem" v-for="(item, index) in singerList" :key="index">
-      <a-image class="img" :src="item.picUrl + '?param=150y150'" :alt="item.name" fit="cover" :preview="false" />
+      <a-image
+        class="img"
+        :src="item.picUrl + '?param=150y150'"
+        :alt="item.name"
+        fit="cover"
+        :preview="false"
+      />
       {{ item.name }}
     </li>
   </ul>
 </template>
 <script setup lang="ts">
 import { ref, reactive, onBeforeMount, onMounted, nextTick } from 'vue'
-import {singerApi} from '@/api'
+import { singerApi } from '@/api'
 
 interface singerTypeInt {
   name: string
   value: string
-  list: Array<{ key: string, value: string }>
+  list: Array<{ key: string; value: string }>
 }
 interface artistInt {
   id: number
@@ -55,14 +75,10 @@ const types = ref<singerTypeInt[]>([
   {
     name: 'initial',
     value: '筛选',
-    list: [
-      { key: '-1', value: '热门' },
-      ...strKeys(),
-      {key: '0', value: '#'}
-    ]
+    list: [{ key: '-1', value: '热门' }, ...strKeys(), { key: '0', value: '#' }]
   }
 ])
-const currentTypes = reactive<{[key: string]: number}>({
+const currentTypes = reactive<{ [key: string]: number }>({
   area: 0,
   type: 0,
   initial: 0
@@ -80,9 +96,9 @@ onBeforeMount(async () => {
 onMounted(() => {
   var scroller = document.querySelector('.main_scroller') as HTMLElement
   const ohei = scroller.offsetHeight
-  scroller.onscroll = function(e) {
+  scroller.onscroll = function (e) {
     if (isBottom.value || loading.value) return
-    if (scroller.scrollTop + ohei + 20 > oshei ) {
+    if (scroller.scrollTop + ohei + 20 > oshei) {
       isBottom.value = true
       reachBottom()
     }
@@ -104,22 +120,25 @@ async function getSingers() {
     area: types.value[0].list[currentTypes.area].key,
     initial: types.value[2].list[currentTypes.initial].key
   }
-  await singerApi.list(opts).then((res: any) => {
-    if (res.code === 200) {
-      singerList.value = singerList.value.concat(res.artists)
-      isBottom.value = !res.more
-      nextTick(() => {
-        var scroller = document.querySelector('.main_scroller') as HTMLElement
-        oshei = scroller.scrollHeight
-      })
-    }
-  }).finally(() => {
-    loading.value = false
-  })
+  await singerApi
+    .list(opts)
+    .then((res: any) => {
+      if (res.code === 200) {
+        singerList.value = singerList.value.concat(res.artists)
+        isBottom.value = !res.more
+        nextTick(() => {
+          var scroller = document.querySelector('.main_scroller') as HTMLElement
+          oshei = scroller.scrollHeight
+        })
+      }
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 function strKeys() {
-  let arr:{key: string, value: string}[] = []
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(v => {
+  let arr: { key: string; value: string }[] = []
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((v) => {
     arr.push({ key: v, value: v })
   })
   return arr
@@ -130,7 +149,6 @@ function typeChg(type: singerTypeInt, ind: number) {
   currentTypes[type.name] = ind
   getSingers()
 }
-
 </script>
 <style lang="scss" scoped>
 .types {
@@ -190,11 +208,12 @@ function typeChg(type: singerTypeInt, ind: number) {
   justify-content: space-between;
   .sitem {
     width: calc(20% - 10px);
-    height: 10.5rem;
+    margin-bottom: 10px;
+    // height: 10.5rem;
     line-height: 2;
-    .img{
+    .img {
       width: 100%;
-      height: 8rem;
+      // height: 8rem;
       border-radius: 6px;
     }
   }

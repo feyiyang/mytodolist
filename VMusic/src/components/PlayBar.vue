@@ -202,12 +202,12 @@ onMounted(() => {
     songInfo.value = val
     document.title = val.name || 'EN音乐'
     getTimer = setTimeout(() => {
+      console.log(songInfo)
       audioElem.value?.pause()
       slidebar.now = 0
       songInfo.value.id && getMedia()
     }, 400)
   })
-  console.log(songInfo)
   if (songInfo.value.id && !mediaInfo.value) {
     getMedia()
   }
@@ -241,13 +241,12 @@ function getMedia() {
   songApi
     .getUrl({ id: songInfo.value?.id })
     .then((res) => {
-      if (res.code === 200) {
+      console.log(res)
+      if (res.length) {
         mediaInfo.value = res[0]
-      } else {
-        throw Error('get fail')
       }
     })
-    .catch(err => {
+    .catch(() => {
       onPlay.value = false
       mediaInfo.value = {}
       audioElem.value?.pause()
