@@ -1,6 +1,7 @@
 <template>
   <a-scrollbar
     outer-class="home"
+    class="main_scroller"
     :outer-style="{ width: '100%', height: '100%', overflow: 'hidden auto' }"
     style="padding: 0 40px; height: 100%; overflow: hidden auto"
   >

@@ -18,7 +18,7 @@ exports.handler = function(event, context, callback) {
     let retdata = ''
     const options = {
       hostname: 'music-player-server.immortalboy.cn',
-      path: queryPath,
+      path: queryPath + `?_t=${Date.now()}`,
       method: event.httpMethod,
       headers: {
         'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ exports.handler = function(event, context, callback) {
               callback(null, {
                 statusCode: res.statusCode,
                 headers: {
-                  "Access-Control-Allow-Origin" : "*",
+                  // "Access-Control-Allow-Origin" : "*",
                   'Content-Type': 'application/json'
                 },
                 body: retdata

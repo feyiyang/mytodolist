@@ -16,8 +16,7 @@ instance.interceptors.request.use(
   (config: AxiosRequestConfig | any) => {
     // 在发送请求之前做些什么
     config.params = {
-      ...config.params,
-      _t: Date.now()
+      ...config.params
     }
     if (config.data instanceof FormData) {
       Object.assign(config.headers, config.data.getHeaders())

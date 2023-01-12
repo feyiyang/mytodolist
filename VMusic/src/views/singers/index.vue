@@ -1,5 +1,5 @@
 <template>
-  <div class="types" v-for="(type, index) in types" :key="index">
+  <div class="types" :class="`types_${index}`" v-for="(type, index) in types" :key="index">
     <span class="name">{{ type.value }}: </span>
     <ul class="items">
       <li class="item" v-for="(item, ind) in type.list" :key="ind" @click="typeChg(type, ind)">
@@ -7,15 +7,26 @@
       </li>
     </ul>
   </div>
+  <ul class="slist">
+    <li class="sitem" v-for="(item, index) in singerList" :key="index">
+      <a-image class="img" :src="item.picUrl + '?param=150y150'" :alt="item.name" fit="cover" :preview="false" />
+      {{ item.name }}
+    </li>
+  </ul>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onBeforeMount } from 'vue'
+import { ref, reactive, onBeforeMount, onMounted, nextTick } from 'vue'
 import {singerApi} from '@/api'
 
 interface singerTypeInt {
   name: string
   value: string
   list: Array<{ key: string, value: string }>
+}
+interface artistInt {
+  id: number
+  name: string
+  picUrl?: string
 }
 
 const types = ref<singerTypeInt[]>([
@@ -56,13 +67,33 @@ const currentTypes = reactive<{[key: string]: number}>({
   type: 0,
   initial: 0
 })
+const singerList = ref<artistInt[]>([])
 const loading = ref<boolean>(false)
 const curPage = ref<number>(0)
-const perPage = ref<number>(30)
+const perPage = ref<number>(50)
+const isBottom = ref<boolean>(false)
+let oshei = 0
 
 onBeforeMount(async () => {
   await getSingers()
 })
+onMounted(() => {
+  var scroller = document.querySelector('.main_scroller') as HTMLElement
+  const ohei = scroller.offsetHeight
+  scroller.onscroll = function(e) {
+    if (isBottom.value || loading.value) return
+    if (scroller.scrollTop + ohei + 20 > oshei ) {
+      isBottom.value = true
+      reachBottom()
+    }
+  }
+})
+
+function reachBottom() {
+  if (loading.value) return
+  curPage.value++
+  getSingers()
+}
 
 async function getSingers() {
   loading.value = true
@@ -73,8 +104,15 @@ async function getSingers() {
     area: types.value[0].list[currentTypes.area].key,
     initial: types.value[2].list[currentTypes.initial].key
   }
-  await singerApi.list(opts).then(res => {
-    console.log(res)
+  await singerApi.list(opts).then((res: any) => {
+    if (res.code === 200) {
+      singerList.value = singerList.value.concat(res.artists)
+      isBottom.value = !res.more
+      nextTick(() => {
+        var scroller = document.querySelector('.main_scroller') as HTMLElement
+        oshei = scroller.scrollHeight
+      })
+    }
   }).finally(() => {
     loading.value = false
   })
@@ -87,6 +125,7 @@ function strKeys() {
   return arr
 }
 function typeChg(type: singerTypeInt, ind: number) {
+  curPage.value = 0
   if (loading.value) return
   currentTypes[type.name] = ind
   getSingers()
@@ -138,10 +177,25 @@ function typeChg(type: singerTypeInt, ind: number) {
       color: $somegreen;
     }
   }
-  &:last-of-type {
+  &.types_2 {
     .item {
       width: 56px;
       margin-bottom: 6px;
+    }
+  }
+}
+.slist {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .sitem {
+    width: calc(20% - 10px);
+    height: 10.5rem;
+    line-height: 2;
+    .img{
+      width: 100%;
+      height: 8rem;
+      border-radius: 6px;
     }
   }
 }
