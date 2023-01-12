@@ -33,6 +33,9 @@
       {{ item.name }}
     </li>
   </ul>
+  <span class="load_icon" v-if="loading">
+    <icon-loading class="ico" />
+  </span>
 </template>
 <script setup lang="ts">
 import { ref, reactive, onBeforeMount, onMounted, nextTick } from 'vue'
@@ -84,7 +87,7 @@ const currentTypes = reactive<{ [key: string]: number }>({
   initial: 0
 })
 const singerList = ref<artistInt[]>([])
-const loading = ref<boolean>(false)
+const loading = ref<boolean>(true)
 const curPage = ref<number>(0)
 const perPage = ref<number>(50)
 const isBottom = ref<boolean>(false)
@@ -98,7 +101,7 @@ onMounted(() => {
   const ohei = scroller.offsetHeight
   scroller.onscroll = function (e) {
     if (isBottom.value || loading.value) return
-    if (scroller.scrollTop + ohei + 20 > oshei) {
+    if (scroller.scrollTop + ohei + 70 > oshei) {
       isBottom.value = true
       reachBottom()
     }
@@ -145,6 +148,7 @@ function strKeys() {
 }
 function typeChg(type: singerTypeInt, ind: number) {
   curPage.value = 0
+  singerList.value = []
   if (loading.value) return
   currentTypes[type.name] = ind
   getSingers()
@@ -213,9 +217,18 @@ function typeChg(type: singerTypeInt, ind: number) {
     line-height: 2;
     .img {
       width: 100%;
-      // height: 8rem;
+      height: 9rem;
       border-radius: 6px;
     }
+  }
+}
+.load_icon {
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  .ico {
+    font-size: 26px;
+    color: #999;
   }
 }
 </style>
