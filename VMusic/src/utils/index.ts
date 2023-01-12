@@ -8,6 +8,16 @@ export function longFmt(val: number, unit = 'ms'): string {
   return res
 }
 
+export function countFormat(num: number | string): string {
+  let res: string = num + ''
+  if (res.length > 8) {
+    res = res.replace(/\d{8}$/, '亿')
+  } else if (res.length > 4) {
+    res = res.replace(/\d{4}$/, '万')
+  }
+  return res
+}
+
 export function dateFormat(date: Date, fmt: string): string {
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))

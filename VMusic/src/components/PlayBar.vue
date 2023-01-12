@@ -195,15 +195,20 @@ let playSubStop: any
 
 onMounted(() => {
   let getTimer: any = null
+  audioElem.value?.pause()
+  onPlay.value = false
   playSubStop = playerSubs('current', (val) => {
     clearTimeout(getTimer)
     songInfo.value = val
     document.title = val.name || 'EN音乐'
     getTimer = setTimeout(() => {
-      getMedia()
+      audioElem.value?.pause()
+      slidebar.now = 0
+      songInfo.value.id && getMedia()
     }, 400)
   })
-  if (songInfo.value && !mediaInfo.value) {
+  console.log(songInfo)
+  if (songInfo.value.id && !mediaInfo.value) {
     getMedia()
   }
   if (audioElem.value) {
@@ -236,7 +241,16 @@ function getMedia() {
   songApi
     .getUrl({ id: songInfo.value?.id })
     .then((res) => {
-      mediaInfo.value = res[0]
+      if (res.code === 200) {
+        mediaInfo.value = res[0]
+      } else {
+        throw Error('get fail')
+      }
+    })
+    .catch(err => {
+      onPlay.value = false
+      mediaInfo.value = {}
+      audioElem.value?.pause()
     })
     .finally(() => {
       loading.value = false

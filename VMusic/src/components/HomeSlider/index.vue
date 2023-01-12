@@ -30,6 +30,7 @@
 import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { type Options } from '@splidejs/splide'
+import { countFormat } from '@/utils'
 import { usePlayer } from '@/utils/hooks'
 type listItem = {
   id: number
@@ -48,7 +49,7 @@ const props = defineProps<{
   list: listItem[]
 }>()
 const { player: playsongs } = usePlayer()
-const { list: queue, current: songInfo, playing: onPlay } = toRefs(playsongs)
+const { list: queue, current: songInfo } = toRefs(playsongs)
 const typeEnums: {
   [key: string]: (item: listItem, isCover?: boolean) => void
 } = {
@@ -58,7 +59,6 @@ const typeEnums: {
     })
   },
   newsong(item, isCover) {
-    console.log(item, isCover)
     if (isCover) {
       const song = {
         name: item.name,
@@ -70,18 +70,13 @@ const typeEnums: {
       queue.value = [song]
       songInfo.value = song
     }
-    // router.push({
-    //   path: `/song/detail/${item.id}`
-    // })
   }
 }
 
 function nunberFmt(item: listItem): string {
   let res: string =
     (props.type === 'dj' ? item?.program?.listenerCount : item?.playCount) + ''
-  if (res.length > 5) {
-    res = res.replace(/\d{4}$/, '万')
-  }
+  res = countFormat(res)
   return res
 }
 function itemClick(item: listItem, isCover = false) {

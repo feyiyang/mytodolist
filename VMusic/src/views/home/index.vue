@@ -17,11 +17,7 @@
         <a-tab-pane v-for="(item, key) of tabs" :key="key" :title="item.name">
         </a-tab-pane>
       </a-tabs>
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component"></component>
-        </keep-alive>
-      </router-view>
+      <router-view></router-view>
     </div>
   </a-scrollbar>
 </template>
@@ -31,7 +27,6 @@ import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
-console.log(route)
 const tabs = reactive<{ [key: string]: { alias?: string[], name: string } }>({
   '/': { name: '精选', alias: ['/'] },
   // '/stations': { name: '有声电台' },

@@ -52,6 +52,17 @@ const songs: apiInter = {
   }
 }
 
+const singer = {
+  // 歌手分类列表
+  list: {
+    url: '/artist/list',
+    // limit : 返回数量 , 默认为 30
+    // offset : 偏移数量，用于分页
+    // initial: 按首字母索引查找参数
+  }
+}
+
 export const searchApi = apiFunc(search)
 export const songApi = apiFunc(song)
 export const songsApi = apiFunc(songs)
+export const singerApi = apiFunc(singer)

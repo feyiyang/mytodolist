@@ -7,8 +7,7 @@ import {
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/home',
-    alias: '/',
+    path: '/',
     component: () => import('@/views/home/index.vue'),
     children: [
       // 首页-精选
@@ -24,11 +23,17 @@ const routes: RouteRecordRaw[] = [
         name: 'topsPage',
         component: () => import('@/views/toplists/index.vue')
       },
-      // 歌单详情
+      // 歌单列表详情
       {
         path: '/playlists/:id',
         name: 'playListDetail',
         component: () => import('@/views/playlists/index.vue')
+      },
+      // 歌手列表
+      {
+        path: '/singers',
+        name: 'singerList',
+        component: () => import('@/views/singers/index.vue')
       }
     ]
   },
