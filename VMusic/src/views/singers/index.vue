@@ -22,7 +22,7 @@
     </ul>
   </div>
   <ul class="slist">
-    <li class="sitem" v-for="(item, index) in singerList" :key="index">
+    <li class="sitem" v-for="(item, index) in singerList" :key="index" @click="goDetail(item)">
       <a-image
         class="img"
         :src="item.picUrl + '?param=150y150'"
@@ -40,11 +40,16 @@
 <script setup lang="ts">
 import { ref, reactive, onBeforeMount, onMounted, nextTick } from 'vue'
 import { singerApi } from '@/api'
+import router from '@/router';
 
+interface kvInt {
+  key: string
+  value: string
+}
 interface singerTypeInt {
   name: string
   value: string
-  list: Array<{ key: string; value: string }>
+  list: kvInt[]
 }
 interface artistInt {
   id: number
@@ -108,13 +113,13 @@ onMounted(() => {
   }
 })
 
-function reachBottom() {
+function reachBottom(): void {
   if (loading.value) return
   curPage.value++
   getSingers()
 }
 
-async function getSingers() {
+async function getSingers(): Promise<any> {
   loading.value = true
   const opts = {
     limit: perPage.value,
@@ -139,20 +144,24 @@ async function getSingers() {
       loading.value = false
     })
 }
-function strKeys() {
-  let arr: { key: string; value: string }[] = []
+function strKeys(): kvInt[] {
+  let arr: kvInt[] = []
   'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((v) => {
     arr.push({ key: v, value: v })
   })
   return arr
 }
-function typeChg(type: singerTypeInt, ind: number) {
+function typeChg(type: singerTypeInt, ind: number): void {
   curPage.value = 0
   singerList.value = []
   if (loading.value) return
   currentTypes[type.name] = ind
   getSingers()
 }
+function goDetail(item: artistInt): void {
+  router.push(`/singer/detail/${item.id}`)
+}
+
 </script>
 <style lang="scss" scoped>
 .types {

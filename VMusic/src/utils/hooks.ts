@@ -111,7 +111,7 @@ export function useAccount(): [any, (val: object) => void] {
   ]
 }
 
-// 播放器
+// 全局播放器
 interface playerInt {
   list: audioItem[]
   current: audioItem & object
@@ -143,6 +143,35 @@ export function usePlayer(): {
       return playerWatchStops[keyName]
     },
     playerWatchStops
+  }
+  return ret
+}
+
+// home滚动容器的共享
+let isBottom = ref<boolean>(false)  // 是否触底
+let oscollHei = ref<number>(0) // 滚动区高度
+export function useMainScroll(): {
+  scroller: HTMLElement
+  isBottom: Ref<boolean>
+  oscollHei: Ref<number>
+  reachBottom: (cb: (scroller: HTMLElement) => void, bottomOffset?: number) => void
+} {
+  let ret = {
+    isBottom,
+    oscollHei,
+    reachBottom(cb, bottomOffset = 70) {
+      const scroller = document.querySelector('.main_scroller') as HTMLElement
+      const ohei = scroller.offsetHeight
+      scroller.onscroll = null
+      oscollHei.value = scroller.scrollHeight
+      scroller.onscroll = function () {
+        if (isBottom.value) return
+        if (scroller.scrollTop + ohei + bottomOffset > oscollHei.value) {
+          isBottom.value = true
+          cb(scroller)
+        }
+      }
+    }
   }
   return ret
 }

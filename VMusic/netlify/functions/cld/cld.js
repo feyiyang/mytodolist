@@ -1,17 +1,7 @@
 // Docs on event and context https://docs.netlify.com/functions/build/#code-your-function-2
 import https from "node:https"
 import querystring from 'node:querystring'
-exports.handler = function(event, context, callback) {
-  // console.log('eventget', event)
-  // let evbody
-  // if (event.body) {
-  //   if (!~event.body.indexOf('=')) {
-  //     evbody = event.body.replace('=', ':')
-  //   }
-  //   console.log('evbody:' + evbody + event.body)
-  // }
-  // var { queryPath = '/', ...bodydata } = querystring.parse(event.body)
-  
+exports.handler = function(event, context, callback) {  
   try {
     let bodydata = querystring.parse(event.body)
     let queryPath = bodydata.queryPath
@@ -26,7 +16,6 @@ exports.handler = function(event, context, callback) {
     }
     delete bodydata.queryPath
     const req = https.request(options, (res) => {
-      console.log(bodydata)
       console.log(`状态码: ${res.statusCode}`);
       // console.log(`响应头: ${JSON.stringify(res.headers)}`);
       res.setEncoding('utf8');
@@ -56,7 +45,7 @@ exports.handler = function(event, context, callback) {
           }
           
         } catch(e) {
-          console.error('Error::' + JSON.stringify(e))
+          console.error('May Error Code::' + JSON.stringify(e))
           callback(null, {
             statusCode: res.statusCode,
             headers: {
@@ -73,6 +62,7 @@ exports.handler = function(event, context, callback) {
     req.write(JSON.stringify(bodydata))
     req.end()
   } catch(err) {
+    console.log(bodydata)
     console.error(err)
     callback(null, {
       statusCode: 500,

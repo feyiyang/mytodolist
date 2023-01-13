@@ -3,7 +3,7 @@
     outer-class="songs"
     ref="scrollbarElem"
     :outer-style="{ width: '100%', height: '100%', overflow: 'hidden auto' }"
-    style="padding: 0 40px; height: 100%; overflow: hidden auto"
+    style="height: 100%; overflow: hidden auto"
   > -->
     <a-spin class="contain" :loading="loading">
       <a-row v-if="details" class="header" :gutter="24">

@@ -59,6 +59,29 @@ const singer = {
     // limit : 返回数量 , 默认为 30
     // offset : 偏移数量，用于分页
     // initial: 按首字母索引查找参数
+  },
+  // 描述
+  desc: {
+    url: '/artist/desc'
+  },
+  // 详情
+  detail: {
+    url: '/artist/detail'
+  },
+  // 热门
+  topsong: {
+    url: '/artist/top/song'
+  },
+  // 歌手全部歌曲
+  songs: {
+    url: '/artist/songs',
+    data: {
+      order: 'hot'
+    }
+  },
+  // 歌手专辑
+  album: {
+    url: '/artist/album'
   }
 }
 

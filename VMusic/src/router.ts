@@ -43,6 +43,12 @@ const routes: RouteRecordRaw[] = [
     name: 'songDetail',
     component: () => import('@/views/song/detail.vue')
   },
+  // 歌手详情
+  {
+    path: '/singer/detail/:id',
+    name: 'singerDetail',
+    component: () => import('@/views/singers/detail.vue')
+  },
   {
     path: '/mv',
     name: 'mvPage',

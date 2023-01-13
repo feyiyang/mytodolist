@@ -35,7 +35,7 @@ const tabs = reactive<{ [key: string]: { alias?: string[], name: string } }>({
   '/singers': { name: '歌手' },
   '/allist': { name: '分类歌单' }
 })
-const activeKey = ref<string>(tabs[route.path] ? route.path : '/')
+const activeKey = ref<string>(tabs[route.path] ? route.path : '')
 
 function tabChg(key: string | number) {
   router.push(key as string)
