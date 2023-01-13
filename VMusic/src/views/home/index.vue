@@ -28,7 +28,7 @@ import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
-const tabs = reactive<{ [key: string]: { alias?: string[], name: string } }>({
+const tabs = reactive<{ [key: string]: { alias?: string[]; name: string } }>({
   '/': { name: '精选', alias: ['/'] },
   // '/stations': { name: '有声电台' },
   '/toplists': { name: '排行榜' },

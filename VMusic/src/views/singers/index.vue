@@ -22,7 +22,12 @@
     </ul>
   </div>
   <ul class="slist">
-    <li class="sitem" v-for="(item, index) in singerList" :key="index" @click="goDetail(item)">
+    <li
+      class="sitem"
+      v-for="(item, index) in singerList"
+      :key="index"
+      @click="goDetail(item)"
+    >
       <a-image
         class="img"
         :src="item.picUrl + '?param=150y150'"
@@ -40,7 +45,7 @@
 <script setup lang="ts">
 import { ref, reactive, onBeforeMount, onMounted, nextTick } from 'vue'
 import { singerApi } from '@/api'
-import router from '@/router';
+import router from '@/router'
 
 interface kvInt {
   key: string
@@ -161,7 +166,6 @@ function typeChg(type: singerTypeInt, ind: number): void {
 function goDetail(item: artistInt): void {
   router.push(`/singer/detail/${item.id}`)
 }
-
 </script>
 <style lang="scss" scoped>
 .types {

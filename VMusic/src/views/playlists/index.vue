@@ -5,191 +5,191 @@
     :outer-style="{ width: '100%', height: '100%', overflow: 'hidden auto' }"
     style="height: 100%; overflow: hidden auto"
   > -->
-    <a-spin class="contain" :loading="loading">
-      <a-row v-if="details" class="header" :gutter="24">
-        <a-col :span="6">
-          <a-image
-            class="cover_img"
-            :src="details?.coverImgUrl"
-            width="100%"
-            height="auto"
-            fit="cover"
-            show-loader
-          />
-        </a-col>
-        <a-col :span="18">
-          <strong class="title">
-            {{ details.name }}
-          </strong>
-          <div class="info">
-            <img class="avatar" :src="details.creator.avatarUrl" alt="" />
-            {{ details.creator.nickname }}
-            <span class="tag" v-for="(tag, index) in details.tags" :key="index">
-              #{{ tag }}
-            </span>
-          </div>
-          <div class="btns">
-            <a-button class="btn_play" size="small" @click="playSongHandler()"
-              >播放全部</a-button
-            >
-          </div>
-          <div :class="['desc', showMore ? 'show' : '']">
-            {{ details.description }}
-            <component
-              v-if="details.description.length > 32"
-              :is="showMore ? 'icon-up' : 'icon-down'"
-              class="more"
-              @click="showMore = !showMore"
-            />
-          </div>
-        </a-col>
-      </a-row>
-      <a-tabs
-        v-if="details"
-        default-active-key="1"
-        :tabBarGutter="40"
-        :headerPadding="false"
-      >
-        <a-tab-pane :title="`歌曲${trackIds.length}`" key="1">
-          <a-list
-            class="songs"
-            :bordered="false"
-            :split="false"
-            :loading="loadList"
-            hoverable
+  <a-spin class="contain" :loading="loading">
+    <a-row v-if="details" class="header" :gutter="24">
+      <a-col :span="6">
+        <a-image
+          class="cover_img"
+          :src="details?.coverImgUrl"
+          width="100%"
+          height="auto"
+          fit="cover"
+          show-loader
+        />
+      </a-col>
+      <a-col :span="18">
+        <strong class="title">
+          {{ details.name }}
+        </strong>
+        <div class="info">
+          <img class="avatar" :src="details.creator.avatarUrl" alt="" />
+          {{ details.creator.nickname }}
+          <span class="tag" v-for="(tag, index) in details.tags" :key="index">
+            #{{ tag }}
+          </span>
+        </div>
+        <div class="btns">
+          <a-button class="btn_play" size="small" @click="playSongHandler()"
+            >播放全部</a-button
           >
-            <a-list-item class="head">
-              <a-row>
-                <a-col :span="12">歌曲</a-col>
-                <a-col :span="5">歌手</a-col>
-                <a-col :span="5">专辑</a-col>
-                <a-col :span="2">时长</a-col>
-              </a-row>
-            </a-list-item>
-            <a-list-item
-              v-for="(song, index) in songs"
-              :key="index"
-              class="song_item"
-              :class="song.id === playsongs.current?.id ? 'current_item' : ''"
-            >
-              <a-row>
-                <a-col
-                  :span="12"
-                  class="names"
-                  :title="song.name + ' ' + song.alia.join(' ')"
-                >
-                  &nbsp;
-                  <icon-play-arrow
-                    class="play_arrow"
-                    @click="playSongHandler(index)"
-                  />
-                  <span class="name">
-                    {{ song.name }}
-                    <span class="extra" v-if="song.alia.length">
-                      ({{ song.alia.join(',') }})
-                    </span>
-                  </span>
-                  <span class="fee" v-if="song.fee == 1"> VIP </span>
-                </a-col>
-                <a-col class="songers" :span="5">
-                  <template v-for="(ar, ind) in song.ar" :key="ind">
-                    {{ ar.name }}<i v-if="ind < song.ar.length - 1">/</i>
-                  </template>
-                </a-col>
-                <a-col class="album" :span="5" :title="song.al.name">{{
-                  song.al.name
-                }}</a-col>
-                <a-col :span="2">{{ longFmt(song.dt) }}</a-col>
-              </a-row>
-            </a-list-item>
-          </a-list>
-        </a-tab-pane>
-        <a-tab-pane
-          class="comments"
-          :title="`评论${details?.commentCount}`"
-          key="2"
+        </div>
+        <div :class="['desc', showMore ? 'show' : '']">
+          {{ details.description }}
+          <component
+            v-if="details.description.length > 32"
+            :is="showMore ? 'icon-up' : 'icon-down'"
+            class="more"
+            @click="showMore = !showMore"
+          />
+        </div>
+      </a-col>
+    </a-row>
+    <a-tabs
+      v-if="details"
+      default-active-key="1"
+      :tabBarGutter="40"
+      :headerPadding="false"
+    >
+      <a-tab-pane :title="`歌曲${trackIds.length}`" key="1">
+        <a-list
+          class="songs"
+          :bordered="false"
+          :split="false"
+          :loading="loadList"
+          hoverable
         >
-          <section class="hot">
-            <p class="ctitle">精彩评论</p>
-            <a-comment
-              v-for="(comment, index) in hotComments"
-              :key="index"
-              class="comment_item"
-              :content="comment.content"
-              :author="comment.user.nickname"
-              :avatar="comment.user.avatarUrl"
-              :datetime="comment.timeStr"
-            >
-              <template #actions>
-                <icon-thumb-up /> {{ comment.likedCount }}
-              </template>
-              <div v-if="comment.beReplied.length" class="comment_inner">
-                <template v-for="(rep, ind) in comment.beReplied" :key="ind">
-                  <p v-if="rep.status === -5" class="deleted">该评论已删除</p>
-                  <a-comment
-                    v-else
-                    :content="rep.content"
-                    :author="rep.user.nickname"
-                    :avatar="rep.user.avatarUrl"
-                    :datetime="rep.timeStr"
-                  ></a-comment>
+          <a-list-item class="head">
+            <a-row>
+              <a-col :span="12">歌曲</a-col>
+              <a-col :span="5">歌手</a-col>
+              <a-col :span="5">专辑</a-col>
+              <a-col :span="2">时长</a-col>
+            </a-row>
+          </a-list-item>
+          <a-list-item
+            v-for="(song, index) in songs"
+            :key="index"
+            class="song_item"
+            :class="song.id === playsongs.current?.id ? 'current_item' : ''"
+          >
+            <a-row>
+              <a-col
+                :span="12"
+                class="names"
+                :title="song.name + ' ' + song.alia.join(' ')"
+              >
+                &nbsp;
+                <icon-play-arrow
+                  class="play_arrow"
+                  @click="playSongHandler(index)"
+                />
+                <span class="name">
+                  {{ song.name }}
+                  <span class="extra" v-if="song.alia.length">
+                    ({{ song.alia.join(',') }})
+                  </span>
+                </span>
+                <span class="fee" v-if="song.fee == 1"> VIP </span>
+              </a-col>
+              <a-col class="songers" :span="5">
+                <template v-for="(ar, ind) in song.ar" :key="ind">
+                  {{ ar.name }}<i v-if="ind < song.ar.length - 1">/</i>
                 </template>
-              </div>
-            </a-comment>
-            <a-button
-              class="showmore"
-              v-if="hotComments.length > hotCommentsCount"
-              shape="round"
-              @click="hotCommentsCount += 20"
-              >更多精彩评论</a-button
-            >
-          </section>
-          <section class="newc">
-            <p class="ctitle new_comment_title">
-              全部评论({{ details?.commentCount }})
-            </p>
-            <a-comment
-              v-for="(comment, index) in newComments"
-              :key="index"
-              class="comment_item"
-              :content="comment.content"
-              :author="comment.user.nickname"
-              :avatar="comment.user.avatarUrl"
-              :datetime="comment.timeStr"
-            >
-              <template #actions>
-                <icon-thumb-up />
-                {{ comment.likedCount ? comment.likedCount : '' }}
+              </a-col>
+              <a-col class="album" :span="5" :title="song.al.name">{{
+                song.al.name
+              }}</a-col>
+              <a-col :span="2">{{ longFmt(song.dt) }}</a-col>
+            </a-row>
+          </a-list-item>
+        </a-list>
+      </a-tab-pane>
+      <a-tab-pane
+        class="comments"
+        :title="`评论${details?.commentCount}`"
+        key="2"
+      >
+        <section class="hot">
+          <p class="ctitle">精彩评论</p>
+          <a-comment
+            v-for="(comment, index) in hotComments"
+            :key="index"
+            class="comment_item"
+            :content="comment.content"
+            :author="comment.user.nickname"
+            :avatar="comment.user.avatarUrl"
+            :datetime="comment.timeStr"
+          >
+            <template #actions>
+              <icon-thumb-up /> {{ comment.likedCount }}
+            </template>
+            <div v-if="comment.beReplied.length" class="comment_inner">
+              <template v-for="(rep, ind) in comment.beReplied" :key="ind">
+                <p v-if="rep.status === -5" class="deleted">该评论已删除</p>
+                <a-comment
+                  v-else
+                  :content="rep.content"
+                  :author="rep.user.nickname"
+                  :avatar="rep.user.avatarUrl"
+                  :datetime="rep.timeStr"
+                ></a-comment>
               </template>
-              <div v-if="comment.beReplied.length" class="comment_inner">
-                <template v-for="(rep, ind) in comment.beReplied" :key="ind">
-                  <p v-if="rep.status === -5" class="deleted">该评论已删除</p>
-                  <a-comment
-                    v-else
-                    :content="rep.content"
-                    :author="rep.user.nickname"
-                    :avatar="rep.user.avatarUrl"
-                    :datetime="rep.timeStr"
-                  ></a-comment>
-                </template>
-              </div>
-            </a-comment>
-            <a-pagination
-              class="pages"
-              v-model:current="curPage"
-              size="small"
-              :total="details.commentCount"
-              @change="pageChg"
-            />
-          </section>
-        </a-tab-pane>
-      </a-tabs>
-    </a-spin>
-    <a-result v-if="dataError" status="error" title="网络错误">
-      <template #icon>
-        <icon-wifi />
-      </template>
-    </a-result>
+            </div>
+          </a-comment>
+          <a-button
+            class="showmore"
+            v-if="hotComments.length > hotCommentsCount"
+            shape="round"
+            @click="hotCommentsCount += 20"
+            >更多精彩评论</a-button
+          >
+        </section>
+        <section class="newc">
+          <p class="ctitle new_comment_title">
+            全部评论({{ details?.commentCount }})
+          </p>
+          <a-comment
+            v-for="(comment, index) in newComments"
+            :key="index"
+            class="comment_item"
+            :content="comment.content"
+            :author="comment.user.nickname"
+            :avatar="comment.user.avatarUrl"
+            :datetime="comment.timeStr"
+          >
+            <template #actions>
+              <icon-thumb-up />
+              {{ comment.likedCount ? comment.likedCount : '' }}
+            </template>
+            <div v-if="comment.beReplied.length" class="comment_inner">
+              <template v-for="(rep, ind) in comment.beReplied" :key="ind">
+                <p v-if="rep.status === -5" class="deleted">该评论已删除</p>
+                <a-comment
+                  v-else
+                  :content="rep.content"
+                  :author="rep.user.nickname"
+                  :avatar="rep.user.avatarUrl"
+                  :datetime="rep.timeStr"
+                ></a-comment>
+              </template>
+            </div>
+          </a-comment>
+          <a-pagination
+            class="pages"
+            v-model:current="curPage"
+            size="small"
+            :total="details.commentCount"
+            @change="pageChg"
+          />
+        </section>
+      </a-tab-pane>
+    </a-tabs>
+  </a-spin>
+  <a-result v-if="dataError" status="error" title="网络错误">
+    <template #icon>
+      <icon-wifi />
+    </template>
+  </a-result>
   <!-- </a-scrollbar> -->
 </template>
 <script setup lang="ts">

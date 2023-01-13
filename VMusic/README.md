@@ -5,14 +5,15 @@ npm run dev
 
 ### IDE：VSCode
 
-[vue IDE 支持(Volar)](https://cn.vuejs.org/guide/scaling-up/tooling.html#ide-support)、Prettier-Code formater、Prettier Eslint 
+[vue IDE 支持(Volar)](https://cn.vuejs.org/guide/scaling-up/tooling.html#ide-support)、Prettier-Code formater、Prettier Eslint
 
 ### Vue3 + TypeScript + Vite
 
 [vite](https://vitejs.cn/vite3-cn/)初始化项目
 
 #### 代码格式
-`npm run format`自动格式化  eslint + prettier 
+
+`npm run format`自动格式化 eslint + prettier
 
 ### vue-router4
 

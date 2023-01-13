@@ -20,9 +20,12 @@ export function countFormat(num: number | string): string {
 
 export function dateFormat(date: Date, fmt: string): string {
   if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+    fmt = fmt.replace(
+      RegExp.$1,
+      (date.getFullYear() + '').substr(4 - RegExp.$1.length)
+    )
   }
-  let tt:any = {
+  let tt: any = {
     'M+': date.getMonth() + 1,
     'd+': date.getDate(),
     'h+': date.getHours(),
@@ -32,7 +35,10 @@ export function dateFormat(date: Date, fmt: string): string {
   for (let k in tt) {
     if (new RegExp(`(${k})`).test(fmt)) {
       let str: string = tt[k] + ''
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str))
+      fmt = fmt.replace(
+        RegExp.$1,
+        RegExp.$1.length === 1 ? str : padLeftZero(str)
+      )
     }
   }
   return fmt

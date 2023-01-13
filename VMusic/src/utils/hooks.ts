@@ -148,18 +148,20 @@ export function usePlayer(): {
 }
 
 // home滚动容器的共享
-let isBottom = ref<boolean>(false)  // 是否触底
-let oscollHei = ref<number>(0) // 滚动区高度
+const isBottom = ref<boolean>(false) // 是否触底
+const oscollHei = ref<number>(0) // 滚动区高度
 export function useMainScroll(): {
-  scroller: HTMLElement
   isBottom: Ref<boolean>
   oscollHei: Ref<number>
-  reachBottom: (cb: (scroller: HTMLElement) => void, bottomOffset?: number) => void
+  reachBottom: (
+    cb: (scroller: HTMLElement) => void,
+    bottomOffset?: number
+  ) => void
 } {
-  let ret = {
+  const ret = {
     isBottom,
     oscollHei,
-    reachBottom(cb, bottomOffset = 70) {
+    reachBottom(cb: (scroller: HTMLElement) => void, bottomOffset = 70) {
       const scroller = document.querySelector('.main_scroller') as HTMLElement
       const ohei = scroller.offsetHeight
       scroller.onscroll = null

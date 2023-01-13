@@ -1,6 +1,8 @@
 <template>
   <div id="sidebar">
-    <h1><img src="../assets/music.svg" height="20" alt="音乐" />&ensp;EN音乐</h1>
+    <h1>
+      <img src="../assets/music.svg" height="20" alt="音乐" />&ensp;EN音乐
+    </h1>
     <div class="navs">
       <h3>在线音乐</h3>
       <ul class="list">
