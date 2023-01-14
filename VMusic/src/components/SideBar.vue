@@ -49,7 +49,7 @@ const [, setModalVisible] = useShowModals()
 const [{ profile }] = useAccount()
 const current: Ref<number> = ref(0)
 const ols: Ref<routeCfg[]> = ref([
-  { val: '音乐馆', path: '/home', icon: `musics` },
+  { val: '音乐馆', path: '/', icon: `musics` },
   { val: 'MV', path: '/mv', icon: 'MV' },
   { val: '电台', path: '/station', icon: 'station' }
 ])

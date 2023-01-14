@@ -62,7 +62,6 @@ exports.handler = function(event, context, callback) {
     req.write(JSON.stringify(bodydata))
     req.end()
   } catch(err) {
-    console.log(bodydata)
     console.error(err)
     callback(null, {
       statusCode: 500,

@@ -25,16 +25,16 @@ export function dateFormat(date: Date, fmt: string): string {
       (date.getFullYear() + '').substr(4 - RegExp.$1.length)
     )
   }
-  let tt: any = {
+  const tt: any = {
     'M+': date.getMonth() + 1,
     'd+': date.getDate(),
     'h+': date.getHours(),
     'm+': date.getMinutes(),
     's+': date.getSeconds()
   }
-  for (let k in tt) {
+  for (const k in tt) {
     if (new RegExp(`(${k})`).test(fmt)) {
-      let str: string = tt[k] + ''
+      const str: string = tt[k] + ''
       fmt = fmt.replace(
         RegExp.$1,
         RegExp.$1.length === 1 ? str : padLeftZero(str)
@@ -44,7 +44,7 @@ export function dateFormat(date: Date, fmt: string): string {
   return fmt
 }
 
-var padLeftZero = function (str: string) {
+const padLeftZero = function (str: string) {
   // return ('00' + str).substr(str.length)
   return '00'.substring(str.length) + str
 }

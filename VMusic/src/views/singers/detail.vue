@@ -9,18 +9,17 @@
       <div class="header" v-if="detail">
         <div class="cover">
           <a-image
+            v-if="detail.user"
             class="img"
-            :src="detail.user?.avatarUrl + '?param=200y200'"
+            :src="detail.user.avatarUrl + '?param=200y200'"
             :alt="detail.artist.name"
-          >
-            <template #error>
-              <a-image
-                :src="detail.artist.cover + '?param=200y200'"
-                :alt="detail.artist.name"
-                class="img"
-              />
-            </template>
-          </a-image>
+          />
+          <a-image
+            v-else
+            class="img"
+            :src="detail.artist.cover + '?param=200y200'"
+            :alt="detail.artist.name"
+          />
         </div>
         <div class="infos">
           <h2>{{ detail.artist.name }}</h2>
@@ -41,7 +40,12 @@
               <span class="al">专辑</span>
               <span class="long">时长</span>
             </li>
-            <li class="song_item" v-for="(song, index) in songs" :key="index">
+            <li
+              class="song_item"
+              :class="{ active: song.id === playsongs.current.id }"
+              v-for="(song, index) in songs"
+              :key="index"
+            >
               <span class="btn">
                 <icon-play-arrow
                   class="play_arrow"
@@ -69,8 +73,23 @@
         </a-tab-pane>
         <a-tab-pane :key="1" title="专辑">
           <ul class="als">
-            <li class="al" v-for="(al, index) in albums" :key="index">
-              <a-image :src="al.imgUrl"></a-image>
+            <li
+              class="al"
+              v-for="(al, index) in albums"
+              :key="index"
+              @click="goAl(al)"
+            >
+              <span class="cover">
+                <a-image
+                  class="img"
+                  :src="al.picUrl + '?param=300y300'"
+                  :preview="false"
+                ></a-image>
+              </span>
+              <p class="name">{{ al.name }}</p>
+              <p class="pub_time">
+                {{ dateFormat(new Date(al.publishTime), 'yy-MM-dd') }}
+              </p>
             </li>
           </ul>
         </a-tab-pane>
@@ -81,11 +100,12 @@
   </a-scrollbar>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onBeforeMount } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import { singerApi } from '@/api'
 import { useMainScroll, usePlayer } from '@/utils/hooks'
-import { longFmt } from '@/utils'
+import { longFmt, dateFormat } from '@/utils'
+import router from '@/router'
 
 interface artistInt {
   albumSize?: number
@@ -159,13 +179,18 @@ function tabChg(key: number | string) {
     0: getSongs,
     1: getAlbum
   }
-  console.log(key)
   handlers[key]()
 }
 function playSongHandler(n: number): void {
   playsongs.list = songs.value
   playsongs.current = { queueIndex: n, ...songs.value[n || 0] }
   playsongs.playing = true
+}
+function goAl(al: any): void {
+  router.push({
+    path: `/playlists/${al.id}`,
+    query: { type: 'al' }
+  })
 }
 </script>
 <style lang="scss" scoped>
@@ -199,7 +224,7 @@ function playSongHandler(n: number): void {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.song_item {
+.songslist .song_item {
   display: flex;
   padding: 10px 6px;
   align-items: center;
@@ -209,19 +234,26 @@ function playSongHandler(n: number): void {
     padding: 6px 0;
     color: $textlight;
   }
-  &:hover {
+  &:hover,
+  &.active {
     background-color: #f7f8fa;
+  }
+  &.active {
+    color: $somegreen;
   }
   .btn {
     padding-right: 10px;
     cursor: pointer;
   }
   .info {
-    width: 70%;
+    width: 56%;
+    padding-right: 10px;
     flex-grow: 1;
 
     .main {
-      max-width: 95%;
+      display: inline-block;
+      max-width: 90%;
+      vertical-align: middle;
       @include ovelli;
     }
     .fee {
@@ -248,6 +280,43 @@ function playSongHandler(n: number): void {
   }
   .long {
     width: 80px;
+  }
+}
+.als {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  .al {
+    width: calc(25% - 15px);
+    margin: 0 20px 20px 0;
+    font-size: 12px;
+    &:nth-of-type(4n) {
+      margin: 0;
+    }
+    .cover {
+      display: block;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+      &:hover {
+        transform: translateY(-8px);
+      }
+    }
+    .img {
+      width: 100%;
+      min-height: 5rem;
+      border-radius: 6px;
+    }
+    .name {
+      padding: 8px 0 4px;
+      line-height: 1.6;
+      cursor: pointer;
+      &:hover {
+        color: $mygreen;
+      }
+    }
+    .pub_time {
+      color: $textlight;
+    }
   }
 }
 </style>

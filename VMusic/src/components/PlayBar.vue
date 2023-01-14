@@ -10,11 +10,11 @@
       <p class="name">
         {{ songInfo?.name || '云音乐' }}
       </p>
-      <p>
-        <span v-if="!songInfo" class="er">EN</span>
-        <span class="er" v-for="(a, index) in songInfo?.ar" :key="index">{{
-          a.name
-        }}</span>
+      <p class="er">
+        <span v-if="!songInfo">EN</span>
+        <span v-for="(a, index) in songInfo?.ar" :key="index"
+          >{{ a.name }}&nbsp;
+        </span>
       </p>
     </div>
     <div class="play_handlers" :class="status">
@@ -223,7 +223,7 @@ onMounted(() => {
     }
     let onupdate = false
     audioElem.value.ontimeupdate = (event) => {
-      !onupdate && console.log(event)
+      // !onupdate && console.log(event)
       slidebar.now = audioElem.value?.currentTime || 0
       if (sliderDrag) return
       slidebar.value = audioElem.value?.currentTime || 0

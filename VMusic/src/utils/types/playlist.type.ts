@@ -16,6 +16,8 @@ export interface playlistDetailInt {
   tracks: Array<object>
   trackIds: trackIdsInt[]
   updateTime: number
+  artist?: any
+  info?: any
 }
 
 export interface trackIdsInt {

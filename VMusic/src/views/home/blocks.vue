@@ -1,63 +1,66 @@
 <template>
-  <Splide class="banner_wrap" :options="bannerOptions">
-    <SplideSlide
-      class="carousel_item"
-      v-for="(banner, ind) in banners"
-      :key="ind"
-    >
-      <img :src="banner.imageUrl" alt="" @click="bannerClick(banner)" />
-      <span
-        class="type_title"
-        :style="{ backgroundColor: `${banner.titleColor}` }"
+  <a-spin v-if="loading" class="spin"></a-spin>
+  <template v-else>
+    <Splide class="banner_wrap" :options="bannerOptions">
+      <SplideSlide
+        class="carousel_item"
+        v-for="(banner, ind) in banners"
+        :key="ind"
       >
-        {{ banner.typeTitle }}
-      </span>
-    </SplideSlide>
-  </Splide>
-  <home-block
-    title="推荐歌单"
-    class="personalized"
-    type="playlists"
-    :options="listOptions"
-    :list="personalized"
-  ></home-block>
-  <home-block
-    title="推荐有声电台"
-    class="djlist"
-    type="dj"
-    :countKey="'program.listenerCount'"
-    :options="listOptions"
-    :list="djs"
-  ></home-block>
-  <home-block
-    title="推荐视频"
-    class="mvlist"
-    type="mv"
-    :options="{ perPage: 3, gap: '1rem' }"
-    :list="mvlist"
-  ></home-block>
-  <home-block
-    title="最新发行"
-    class="newsonglist"
-    type="newsong"
-    :options="listOptions"
-    :list="newsong"
-  >
-    <template v-slot="{ item, clickfn }">
-      <div class="cover" @click.stop="clickfn.newsong(item, true)">
-        <img class="cover_img" :src="item.picUrl" :alt="item.name" />
-        <span class="hover">
-          <icon-play-circle-fill class="playicon" />
+        <img :src="banner.imageUrl" alt="" @click="bannerClick(banner)" />
+        <span
+          class="type_title"
+          :style="{ backgroundColor: `${banner.titleColor}` }"
+        >
+          {{ banner.typeTitle }}
         </span>
-      </div>
-      <p class="description">{{ item.name }}</p>
-      <p class="extra">
-        <span class="er" v-for="(er, ind) in item.song.artists" :key="ind">
-          {{ er.name }}
-        </span>
-      </p>
-    </template>
-  </home-block>
+      </SplideSlide>
+    </Splide>
+    <home-block
+      title="推荐歌单"
+      class="personalized"
+      type="playlists"
+      :options="listOptions"
+      :list="personalized"
+    ></home-block>
+    <home-block
+      title="推荐有声电台"
+      class="djlist"
+      type="dj"
+      :countKey="'program.listenerCount'"
+      :options="listOptions"
+      :list="djs"
+    ></home-block>
+    <home-block
+      title="推荐视频"
+      class="mvlist"
+      type="mv"
+      :options="{ perPage: 3, gap: '1rem' }"
+      :list="mvlist"
+    ></home-block>
+    <home-block
+      title="最新发行"
+      class="newsonglist"
+      type="newsong"
+      :options="listOptions"
+      :list="newsong"
+    >
+      <template v-slot="{ item, clickfn }">
+        <div class="cover" @click.stop="clickfn.newsong(item, true)">
+          <img class="cover_img" :src="item.picUrl" :alt="item.name" />
+          <span class="hover">
+            <icon-play-circle-fill class="playicon" />
+          </span>
+        </div>
+        <p class="description">{{ item.name }}</p>
+        <p class="extra">
+          <span class="er" v-for="(er, ind) in item.song.artists" :key="ind">
+            {{ er.name }}
+          </span>
+        </p>
+      </template>
+    </home-block>
+  </template>
 </template>
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
@@ -81,6 +84,7 @@ const listOptions = reactive({
   fixedHeight: '15rem',
   gap
 })
+const loading = ref<boolean>(true)
 const banners = ref<any[]>([])
 const personalized = ref<any[]>([])
 const djs = ref<any[]>([])
@@ -89,15 +93,19 @@ const newsong = ref<any[]>([])
 
 onMounted(async () => {
   await homeApi.banner().then((res: any) => {
-    // console.log(res)
     banners.value = res.banners
   })
   await homeApi.personalized().then((res: any) => {
     personalized.value = res
   })
-  homeApi.djprogram().then((res: any) => {
-    djs.value = res
-  })
+  homeApi
+    .djprogram()
+    .then((res: any) => {
+      djs.value = res
+    })
+    .finally(() => {
+      loading.value = false
+    })
   await homeApi.mvprogram().then((res: any) => {
     mvlist.value = res
   })
@@ -242,5 +250,8 @@ function bannerClick(banner: any): void {
       }
     }
   }
+}
+.spin {
+  text-align: center;
 }
 </style>

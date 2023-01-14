@@ -24,6 +24,10 @@ const song: apiInter = {
   // 音乐url
   getUrl: {
     url: '/song/url/v1'
+  },
+  // 歌词
+  lyric: {
+    url: '/lyric'
   }
 }
 
@@ -85,7 +89,20 @@ const singer = {
   }
 }
 
+const album = {
+  detail: {
+    url: '/album'
+  },
+  comment: {
+    url: '/comment/album',
+    data: {
+      limit: 60
+    }
+  }
+}
+
 export const searchApi = apiFunc(search)
 export const songApi = apiFunc(song)
 export const songsApi = apiFunc(songs)
 export const singerApi = apiFunc(singer)
+export const albumApi = apiFunc(album)
