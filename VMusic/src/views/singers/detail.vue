@@ -96,6 +96,7 @@
         <a-tab-pane :key="2" title="MV"></a-tab-pane>
         <a-tab-pane :key="3" title="详情"></a-tab-pane>
       </a-tabs>
+      <icon-loading class="load_list" v-if="loadList" />
     </a-spin>
   </a-scrollbar>
 </template>
@@ -165,14 +166,20 @@ async function getSongs() {
     })
 }
 async function getAlbum() {
-  await singerApi.album({ id: route.params.id }).then((res) => {
-    if (res.code === 200) {
-      albums.value = res.hotAlbums
-      if (res.more) {
-        curPage.value++
+  loadList.value = true
+  await singerApi
+    .album({ id: route.params.id })
+    .then((res) => {
+      if (res.code === 200) {
+        albums.value = res.hotAlbums
+        if (res.more) {
+          curPage.value++
+        }
       }
-    }
-  })
+    })
+    .finally(() => {
+      loadList.value = false
+    })
 }
 function tabChg(key: number | string) {
   let handlers: any = {
@@ -318,5 +325,8 @@ function goAl(al: any): void {
       color: $textlight;
     }
   }
+}
+.load_list {
+  text-align: center;
 }
 </style>

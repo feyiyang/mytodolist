@@ -14,11 +14,7 @@
             <span class="count"
               ><icon-play-arrow class="parrow" /> {{ nunberFmt(item) }}</span
             >
-            <img
-              class="cover_img"
-              :src="item.picUrl + '?param=300y300'"
-              :alt="item.name"
-            />
+            <img class="cover_img" :src="item.picUrl" :alt="item.name" />
             <span class="hover">
               <icon-play-circle-fill class="playicon" />
             </span>
