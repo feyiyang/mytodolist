@@ -23,12 +23,6 @@ const routes: RouteRecordRaw[] = [
         name: 'topsPage',
         component: () => import('@/views/toplists/index.vue')
       },
-      // 歌单列表详情
-      {
-        path: '/playlists/:id',
-        name: 'playListDetail',
-        component: () => import('@/views/playlists/index.vue')
-      },
       // 歌手列表
       {
         path: '/singers',
@@ -42,6 +36,12 @@ const routes: RouteRecordRaw[] = [
     path: '/song/detail/:id',
     name: 'songDetail',
     component: () => import('@/views/song/detail.vue')
+  },
+  // 歌单列表详情
+  {
+    path: '/playlists/:id',
+    name: 'playListDetail',
+    component: () => import('@/views/playlists/index.vue')
   },
   // 歌手详情
   {

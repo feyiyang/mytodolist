@@ -64,11 +64,11 @@ const singer = {
     // offset : 偏移数量，用于分页
     // initial: 按首字母索引查找参数
   },
-  // 描述
+  // 歌手-描述
   desc: {
     url: '/artist/desc'
   },
-  // 详情
+  // 歌手-详情
   detail: {
     url: '/artist/detail'
   },
@@ -86,6 +86,10 @@ const singer = {
   // 歌手专辑
   album: {
     url: '/artist/album'
+  },
+  // 歌手mv
+  mvs: {
+    url: '/artist/mv'
   }
 }
 

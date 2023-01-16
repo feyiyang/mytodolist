@@ -38,9 +38,9 @@
       {{ item.name }}
     </li>
   </ul>
-  <span class="load_icon" v-if="loading">
+  <div class="load_icon" :hidden="!loading">
     <icon-loading class="ico" />
-  </span>
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive, onBeforeMount, onMounted, nextTick } from 'vue'
@@ -236,7 +236,6 @@ function goDetail(item: artistInt): void {
   }
 }
 .load_icon {
-  display: block;
   margin: 20px auto;
   text-align: center;
   .ico {

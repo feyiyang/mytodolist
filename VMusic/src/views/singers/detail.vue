@@ -33,7 +33,7 @@
         </div>
       </div>
       <a-tabs :header-padding="false" lazy-load @change="tabChg">
-        <a-tab-pane :key="0" title="歌曲">
+        <a-tab-pane :key="0" :title="`歌曲${songsTotal}`">
           <ul class="songslist">
             <li class="song_item">
               <span class="info">歌曲</span>
@@ -93,10 +93,23 @@
             </li>
           </ul>
         </a-tab-pane>
-        <a-tab-pane :key="2" title="MV"></a-tab-pane>
+        <a-tab-pane :key="2" title="MV">
+          <ul class="mvs">
+            <li class="mv_item" v-for="(mv, index) in mvs" :key="index">
+              <div class="cover">
+                <a-image class="img" :src="mv.imgurl + '?param=260y195'" :alt="mv.name"></a-image>
+                <span class="count"><icon-play-arrow />{{ mv.playCount }}</span>
+                <span class="long">{{ longFmt(mv.duration) }}</span>
+              </div>
+              <p class="title" :title="mv.name">{{ mv.name }}</p>
+            </li>
+          </ul>
+        </a-tab-pane>
         <a-tab-pane :key="3" title="详情"></a-tab-pane>
       </a-tabs>
-      <icon-loading class="load_list" v-if="loadList" />
+      <div class="load_list" :hidden="!loadList">
+        <icon-loading class="load_ico" />
+      </div>
     </a-spin>
   </a-scrollbar>
 </template>
@@ -131,8 +144,11 @@ const detail = ref<detInt | null>(null)
 const loading = ref<boolean>(true)
 const loadList = ref<boolean>(false)
 const songs = ref<any[]>([])
+const songsTotal = ref<number>(0)
 const albums = ref<any[]>([])
+const mvs = ref<any[]>([])
 const curPage = ref<number>(0)
+let hasMore = false
 
 onBeforeMount(async () => {
   await singerApi
@@ -150,15 +166,20 @@ onBeforeMount(async () => {
 
 async function getSongs() {
   loadList.value = true
+  if (!curPage.value) {
+    songs.value = []
+  }
   await singerApi
     .songs({ id: route.params.id, limit: 50, offset: curPage.value * 50 })
     .then((res) => {
       if (res.code === 200) {
-        songs.value = res.songs
+        songs.value = songs.value.concat(res.songs)
         isBottom.value = !res.more
+        songsTotal.value = res.total
         if (res.more) {
           curPage.value++
         }
+        hasMore = res.more
       }
     })
     .finally(() => {
@@ -167,11 +188,14 @@ async function getSongs() {
 }
 async function getAlbum() {
   loadList.value = true
+  if (!curPage.value) {
+    albums.value = []
+  }
   await singerApi
-    .album({ id: route.params.id })
+    .album({ id: route.params.id, limit: 50 })
     .then((res) => {
       if (res.code === 200) {
-        albums.value = res.hotAlbums
+        albums.value = albums.value.concat(res.hotAlbums)
         if (res.more) {
           curPage.value++
         }
@@ -181,10 +205,23 @@ async function getAlbum() {
       loadList.value = false
     })
 }
+async function getMv() {
+  loadList.value = true
+  await singerApi.mvs({id: route.params.id, limit: 50}).then(res => {
+    console.log(res)
+    if (res.code === 200) {
+      mvs.value = mvs.value.concat(res.mvs)
+    }
+  }).finally(() => {
+    loadList.value = false
+  })
+}
 function tabChg(key: number | string) {
+  curPage.value = 0
   let handlers: any = {
     0: getSongs,
-    1: getAlbum
+    1: getAlbum,
+    2: getMv
   }
   handlers[key]()
 }
@@ -196,7 +233,7 @@ function playSongHandler(n: number): void {
 function goAl(al: any): void {
   router.push({
     path: `/playlists/${al.id}`,
-    query: { type: 'al' }
+    query: { type: 'album' }
   })
 }
 </script>
@@ -324,6 +361,44 @@ function goAl(al: any): void {
     .pub_time {
       color: $textlight;
     }
+  }
+}
+.mvs {
+  display: flex;
+  flex: 1 1 1;
+  flex-wrap: wrap;
+  .mv_item {
+    width: calc(33.33% - 20px);
+    margin-right: 20px;
+  }
+  .cover {
+    position: relative;
+    font-size: 12px;
+    color: #fff;
+    cursor: pointer;
+    .img {
+      height: 9rem;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    .count {
+      position: absolute;
+      right: 10px;
+      top: 5px;
+    }
+    .long {
+      position: absolute;
+      right: 10px;
+      bottom: 4px;
+    }
+  }
+  .title {
+    width: 100%;
+    padding: 5px 0 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 1.4;
   }
 }
 .load_list {
