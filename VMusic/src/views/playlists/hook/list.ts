@@ -30,7 +30,11 @@ export function useDetails(lisType: 'playlist' | 'album') {
   const listTotal = ref<number>(0)
   const commentSize = ref<number>(50) // 获取歌单评论数 用于分页
   let curIds: number[] = [] // 歌单 - 歌曲id集合
-  const comments = reactive<{ hot: commentItem[]; count: number; new: commentItem[] }>({
+  const comments = reactive<{
+    hot: commentItem[]
+    count: number
+    new: commentItem[]
+  }>({
     hot: [],
     count: 0,
     new: []
@@ -109,28 +113,33 @@ export function useDetails(lisType: 'playlist' | 'album') {
   const album = {
     async getDetails() {
       loading.value = true
-      await albumApi.detail({ id: route.params.id }).then((res: resInt) => {
-        if (res.code === 200) {
-          details.value = res.album
-          songs.value = res.songs
-        }
-        album.getComments()
-      }).finally(() => {
-        loading.value = false
-      })
+      await albumApi
+        .detail({ id: route.params.id })
+        .then((res: resInt) => {
+          if (res.code === 200) {
+            details.value = res.album
+            songs.value = res.songs
+          }
+          album.getComments()
+        })
+        .finally(() => {
+          loading.value = false
+        })
     },
     getComments() {
-      albumApi.comment({ id: route.params.id, limit: commentSize.value }).then((res: resInt) => {
-        console.log(res)
-        if (res.code === 200) {
-          comments.hot = res.hotComments as commentItem[]
-          comments.new = res.comments as commentItem[]
-        }
-      })
+      albumApi
+        .comment({ id: route.params.id, limit: commentSize.value })
+        .then((res: resInt) => {
+          console.log(res)
+          if (res.code === 200) {
+            comments.hot = res.hotComments as commentItem[]
+            comments.new = res.comments as commentItem[]
+          }
+        })
     }
   }
-  const typedFetch = Object.create({playlist, album})
-  let ret: any = {
+  const typedFetch = Object.create({ playlist, album })
+  const ret: any = {
     curPage,
     loading,
     loadList,
@@ -141,8 +150,7 @@ export function useDetails(lisType: 'playlist' | 'album') {
     comments,
     commentSize,
     listTotal,
-    ...typedFetch[lisType]   
+    ...typedFetch[lisType]
   }
   return ret
 }
-

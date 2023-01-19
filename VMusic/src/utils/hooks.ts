@@ -116,33 +116,36 @@ interface playerInt {
   list: audioItem[]
   current: audioItem & object
   playing: boolean
+  lyric: any
 }
 const mainPlayer = reactive<playerInt>({
   list: [],
   current: Object.create(null),
-  playing: false
+  playing: false,
+  lyric: {}
 })
 const playerWatchStops: { [key: string]: () => void } = Object.create(null)
+const onInterface = ref<boolean>(false) // 播放 全屏
 export function usePlayer(): {
   player: playerInt
   playerSubs: (
     name: keyof playerInt,
     callBack: (cur: any, pre?: any) => void
   ) => void
+  onInterface: Ref<boolean>
 } {
   const player = mainPlayer
   const playerRefs = toRefs(player)
   const ret = {
     player,
     playerSubs(keyName: keyof playerInt, cb: (cur: any, pre?: any) => void) {
-      // let val = toRef(player, name)
-      // playerWatchStops[keyName] && playerWatchStops[keyName]()
       playerWatchStops[keyName] = watch(playerRefs[keyName], (val, pre) => {
         cb(val, pre)
       })
       return playerWatchStops[keyName]
     },
-    playerWatchStops
+    playerWatchStops,
+    onInterface
   }
   return ret
 }

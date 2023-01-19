@@ -116,7 +116,9 @@
         </a-tab-pane>
         <a-tab-pane
           class="comments"
-          :title="`评论${details?.commentCount || details.info?.commentCount || ''}`"
+          :title="`评论${
+            details?.commentCount || details.info?.commentCount || ''
+          }`"
           key="2"
         >
           <section class="hot" v-if="hotComments && hotComments.length">
@@ -156,7 +158,9 @@
           </section>
           <section class="newc">
             <p class="ctitle new_comment_title">
-              全部评论({{ details?.commentCount || details.info?.commentCount || 0 }})
+              全部评论({{
+                details?.commentCount || details.info?.commentCount || 0
+              }})
             </p>
             <a-comment
               v-for="(comment, index) in newComments"
@@ -194,7 +198,11 @@
             />
           </section>
         </a-tab-pane>
-        <a-tab-pane title="专辑详情" v-if="lisType === 'album'" class="descriptions">
+        <a-tab-pane
+          title="专辑详情"
+          v-if="lisType === 'album'"
+          class="descriptions"
+        >
           <div class="desc" v-for="(desc, index) in descData" :key="index">
             <span class="label">{{ desc.label }}</span>
             <p class="val">{{ desc.value }}</p>
@@ -242,12 +250,12 @@ const {
 } = useDetails(lisType.value)
 const { hot: hotComments, new: newComments } = toRefs(comments)
 const scrollbarElem = ref<ScrollbarInstance>()
-const hotCommentsCount = ref<number>(20)  // 精彩评论的点击更多
+const hotCommentsCount = ref<number>(20) // 精彩评论的点击更多
 const descData = computed(() => {
   console.log('details::', details)
   let info = [
     { label: '唱片公司:', value: details.value.company },
-    { label: '专辑介绍:', value: details.value.description} 
+    { label: '专辑介绍:', value: details.value.description }
   ]
   return info
 })

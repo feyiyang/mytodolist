@@ -14,7 +14,13 @@
             <span class="count"
               ><icon-play-arrow class="parrow" /> {{ nunberFmt(item) }}</span
             >
-            <img class="cover_img" :src="item.picUrl" :alt="item.name" />
+            <img
+              class="cover_img"
+              :src="`${item.picUrl}?param=${
+                $props.type === 'mv' ? '242y136' : '250y250'
+              }`"
+              :alt="item.name"
+            />
             <span class="hover">
               <icon-play-circle-fill class="playicon" />
             </span>

@@ -97,7 +97,11 @@
           <ul class="mvs">
             <li class="mv_item" v-for="(mv, index) in mvs" :key="index">
               <div class="cover">
-                <a-image class="img" :src="mv.imgurl + '?param=260y195'" :alt="mv.name"></a-image>
+                <a-image
+                  class="img"
+                  :src="mv.imgurl + '?param=260y195'"
+                  :alt="mv.name"
+                ></a-image>
                 <span class="count"><icon-play-arrow />{{ mv.playCount }}</span>
                 <span class="long">{{ longFmt(mv.duration) }}</span>
               </div>
@@ -207,14 +211,17 @@ async function getAlbum() {
 }
 async function getMv() {
   loadList.value = true
-  await singerApi.mvs({id: route.params.id, limit: 50}).then(res => {
-    console.log(res)
-    if (res.code === 200) {
-      mvs.value = mvs.value.concat(res.mvs)
-    }
-  }).finally(() => {
-    loadList.value = false
-  })
+  await singerApi
+    .mvs({ id: route.params.id, limit: 50 })
+    .then((res) => {
+      console.log(res)
+      if (res.code === 200) {
+        mvs.value = mvs.value.concat(res.mvs)
+      }
+    })
+    .finally(() => {
+      loadList.value = false
+    })
 }
 function tabChg(key: number | string) {
   curPage.value = 0

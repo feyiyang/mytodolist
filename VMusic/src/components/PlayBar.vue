@@ -6,6 +6,7 @@
         :src="songInfo.al?.picUrl || emptyImg"
         :preview="false"
         fit="fill"
+        @click="onInterface = !!songInfo"
       />
       <p class="name">
         {{ songInfo?.name || '云音乐' }}
@@ -133,8 +134,13 @@ const audioElem = ref<HTMLAudioElement>()
 const IconFont = Icon.addFromIconFontCn({
   src: 'https://at.alicdn.com/t/c/font_1640412_tq822srt1bg.js'
 })
-const { player: playsongs, playerSubs } = usePlayer()
-const { list: queue, current: songInfo, playing: onPlay } = toRefs(playsongs)
+const { player: playsongs, playerSubs, onInterface } = usePlayer()
+const {
+  list: queue,
+  current: songInfo,
+  playing: onPlay,
+  lyric
+} = toRefs(playsongs)
 const loading = ref<boolean>(false)
 const mediaInfo = ref()
 const drawVisible = ref<boolean>(false)
@@ -174,12 +180,14 @@ const playMethods = ref<playMethod[]>([
     icon: 'icon-repeatall',
     type: 4,
     end() {
+      // console.log('enddd', songInfo.value)
       if (songInfo.value.queueIndex) {
         let ind = songInfo.value.queueIndex + 1
         if (ind > queue.value.length - 1) {
           ind = 0
         }
         songInfo.value = { queueIndex: ind, ...queue.value[ind] }
+        // audioElem.value?.play()
       }
     }
   }
@@ -242,6 +250,14 @@ function getMedia() {
     .then((res) => {
       if (res.length) {
         mediaInfo.value = res[0]
+        return songApi.lyric({ id: songInfo.value.id })
+      }
+    })
+    .then((res) => {
+      if (res.code === 200) {
+        lyric.value = res.lrc
+      } else {
+        console.warn('获取歌词失败')
       }
     })
     .catch(() => {

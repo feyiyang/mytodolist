@@ -33,6 +33,7 @@ export interface audioItem {
   dt?: number // 时长
   al?: any // 专辑封面， 名字
   ar?: any // 歌手
+  lyric?: any // 歌词
 }
 
 export interface commentItem {
