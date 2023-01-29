@@ -4,11 +4,13 @@ import querystring from 'node:querystring'
 exports.handler = function(event, context, callback) {  
   try {
     let bodydata = querystring.parse(event.body)
-    let queryPath = bodydata.queryPath
+    let queryPath = bodydata.queryPath || event.queryStringParameters.queryPath
     let retdata = ''
+    let { queryPath : qpath, ...queryData} = event.httpMethod === 'GET' ? event.queryStringParameters : {}
+    console.log(queryPath + `?${querystring.stringify(queryData) + '&'}_t=${Date.now()}`)
     const options = {
       hostname: 'music-player-server.immortalboy.cn',
-      path: queryPath + `?_t=${Date.now()}`,
+      path: queryPath + `?_t=${Date.now()}&${querystring.stringify(queryData)}`,
       method: event.httpMethod,
       headers: {
         'Content-Type': 'application/json'

@@ -19,6 +19,7 @@
       >
         <a-tab-pane key="1" title="邮箱登录"></a-tab-pane>
         <a-tab-pane key="2" title="二维码登录"></a-tab-pane>
+        <a-tab-pane key="3" title="手机登录"></a-tab-pane>
       </a-tabs>
     </template>
     <a-form
@@ -33,32 +34,24 @@
         field="email"
         :rules="[{ required: true, message: '请输入邮箱!' }]"
       >
-        <a-input v-model:value="formState.email" placeholder="邮箱" />
+        <a-input v-model="formState.email" placeholder="邮箱" />
       </a-form-item>
       <a-form-item
         field="password"
         :rules="[{ required: true, message: '请输入密码!' }]"
       >
-        <a-input-password
-          v-model:value="formState.password"
-          placeholder="密码"
-        />
+        <a-input-password v-model="formState.password" placeholder="密码" />
       </a-form-item>
       <a-form-item field="remember">
         <a-checkbox v-model:checked="formState.remember">记着我</a-checkbox>
       </a-form-item>
       <a-form-item class="btns">
-        <a-button
-          :disabled="loginDisabled"
-          type="primary"
-          html-type="submit"
-          class="login-form-button"
-        >
+        <a-button :disabled="loginDisabled" type="primary" html-type="submit">
           登录
         </a-button>
       </a-form-item>
     </a-form>
-    <div v-else class="qr_wrap">
+    <div v-else-if="activeTab === '2'" class="qr_wrap">
       <img class="qr_img" :src="qrimg" alt="" />
       <p>
         {{ qrstate.message
@@ -67,6 +60,23 @@
         >
       </p>
     </div>
+    <a-form v-else :model="phoneState" auto-label-width autocomplete="off">
+      <a-form-item field="phone">
+        <a-input v-model="phoneState.phone" placeholder="请输入手机号" />
+        <a-button @click="sentCode">{{ btnSent }}</a-button>
+      </a-form-item>
+      <a-form-item field="captcha">
+        <a-input
+          v-model="phoneState.captcha"
+          placeholder="请输入验证码"
+        ></a-input>
+      </a-form-item>
+      <a-form-item>
+        <a-button type="primary" html-type="submit" @click="verifyFn"
+          >登录</a-button
+        >
+      </a-form-item>
+    </a-form>
   </a-modal>
 </template>
 <script setup lang="ts">
@@ -89,6 +99,11 @@ const formState = reactive<loginState>({
   password: '',
   remember: true
 })
+const phoneState = reactive({
+  phone: '',
+  captcha: ''
+})
+const btnSent = ref('获取验证码')
 const loginDisabled = computed<boolean>(() => {
   return !(formState.email && formState.password)
 })
@@ -108,7 +123,9 @@ function onLogin(): void {
     })
 }
 
-function onLoginFailed(): void {}
+function onLoginFailed(): void {
+  console.log('login fail')
+}
 function getQrKey(): void {
   userApi.loginQrKey().then((res: any) => {
     qrkey.value = res.unikey
@@ -135,11 +152,12 @@ function qrCheck(): void {
       qrstate.message = res.message
       qrstate.code = res.code
       if (res.code !== 803) {
-        checkTimer = setTimeout(() => {
-          qrCheck()
-        }, 6000)
+        // checkTimer = setTimeout(() => {
+        //   qrCheck()
+        // }, 6000)
       } else if (res.code === 800) {
-      } else {
+        console.log('登录过期')
+      } else if (res.code === 802 || res.code === 801) {
         storage.set('token', encodeURIComponent(res.cookie))
         setLoginState(true)
         useAccount()
@@ -148,12 +166,32 @@ function qrCheck(): void {
     })
     .catch((err: any) => {
       console.log(err)
-      checkTimer = setTimeout(() => {
-        qrCheck()
-      }, 6000)
+      // checkTimer = setTimeout(() => {
+      //   qrCheck()
+      // }, 6000)
     })
 }
+function anonimousFn() {
+  userApi.anonimous().then((res) => {
+    console.log(res)
+  })
+}
+function sentCode() {
+  userApi
+    .sent({
+      phone: phoneState.phone
+    })
+    .then((res) => {
+      // if (res.code === 200) {}
+      console.log(res)
+      btnSent.value = '发送成功'
+    })
+}
+function verifyFn() {
+  userApi.sent()
+}
 function tabChange(val: any) {
+  console.log(val)
   clearTimeout(checkTimer)
   const isqr: boolean = val == '2'
   if (isqr) {

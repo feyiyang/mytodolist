@@ -19,6 +19,20 @@ const user: apiInter = {
   },
   getAccount: {
     url: '/user/account'
+  },
+  // 游客登录
+  anonimous: {
+    url: '/register/anonimous',
+    method: 'GET'
+  },
+  // 发送验证码
+  sent: {
+    url: '/captcha/sent',
+    method: 'GET'
+  },
+  // 验证验证码
+  verify: {
+    url: '/captcha/verify'
   }
 }
 
