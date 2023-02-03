@@ -246,7 +246,7 @@ onUnmounted(() => {
 function getMedia() {
   loading.value = true
   songApi
-    .getUrl({ id: songInfo.value?.id })
+    .getMUrl({ id: songInfo.value?.id })
     .then((res) => {
       if (res.length) {
         mediaInfo.value = res[0]

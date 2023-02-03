@@ -9,8 +9,8 @@ exports.handler = function(event, context, callback) {
     let { queryPath : qpath, ...queryData} = event.httpMethod === 'GET' ? event.queryStringParameters : {}
     console.log(queryPath + `?${querystring.stringify(queryData) + '&'}_t=${Date.now()}`)
     const options = {
-      hostname: 'music-player-server.immortalboy.cn',
-      path: queryPath + `?_t=${Date.now()}&${querystring.stringify(queryData)}`,
+      hostname: 'service-34dor084-1253457920.gz.apigw.tencentcs.com',
+      path: '/release' + queryPath + `?_t=${Date.now()}&${querystring.stringify(queryData)}`,
       method: event.httpMethod,
       headers: {
         'Content-Type': 'application/json'

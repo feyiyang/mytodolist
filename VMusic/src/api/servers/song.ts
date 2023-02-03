@@ -22,7 +22,11 @@ const song: apiInter = {
     url: '/recommend/resource'
   },
   // 音乐url
+  getMUrl: {
+    url: '/song/url'
+  },
   getUrl: {
+    // 新接口
     url: '/song/url/v1'
   },
   // 歌词
