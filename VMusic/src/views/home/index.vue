@@ -33,7 +33,7 @@ const tabs = reactive<{ [key: string]: { alias?: string[]; name: string } }>({
   // '/stations': { name: '有声电台' },
   '/toplists': { name: '排行榜' },
   '/singers': { name: '歌手' },
-  '/allist': { name: '分类歌单' }
+  '/catlist': { name: '分类歌单' }
 })
 const activeKey = ref<string>(tabs[route.path] ? route.path : '')
 

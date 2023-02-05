@@ -28,6 +28,12 @@ const routes: RouteRecordRaw[] = [
         path: '/singers',
         name: 'singerList',
         component: () => import('@/views/singers/index.vue')
+      },
+      // 分类歌单
+      {
+        path: '/catlist', //
+        name: 'catlist',
+        component: () => import('@/views/playlists/catlist.vue')
       }
     ]
   },

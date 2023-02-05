@@ -57,6 +57,18 @@ const songs: apiInter = {
   // 歌单所有歌曲
   trackAll: {
     url: '/playlist/track/all'
+  },
+  // 热门歌单
+  hotcat: {
+    url: '/playlist/hot'
+  },
+  // 歌单分类
+  catlist: {
+    url: '/playlist/catlist'
+  },
+  // 网友精选碟
+  topsongs: {
+    url: '/top/playlist'
   }
 }
 
