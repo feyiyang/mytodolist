@@ -81,3 +81,5 @@ src/assets/vars.scss 定义全局变量
         searchResult.vue
         Station.vue
 ```
+
+[DEMO](https://encloudmusic.netlify.app/#/)
