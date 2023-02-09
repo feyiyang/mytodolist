@@ -140,3 +140,4 @@ ntl deploy
 
 **特别鸣谢**[NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)  
 **本项目仅用于个人学习，勿用于商业及非法用途**  
+[DEMO](https://encloudmusic.netlify.app/#/)
