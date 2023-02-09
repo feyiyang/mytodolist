@@ -10,9 +10,10 @@ export function longFmt(val: number, unit = 'ms'): string {
 
 export function countFormat(num: number | string): string {
   let res: string = num + ''
-  if (res.length > 8) {
+  const len: number = res.length
+  if (len > 8) {
     res = res.replace(/\d{8}$/, '亿')
-  } else if (res.length > 4) {
+  } else if (len > 4) {
     res = res.replace(/\d{4}$/, '万')
   }
   return res
@@ -25,16 +26,16 @@ export function dateFormat(date: Date, fmt: string): string {
       (date.getFullYear() + '').substr(4 - RegExp.$1.length)
     )
   }
-  const tt: any = {
+  const timedet: {[key: string]: number} = {
     'M+': date.getMonth() + 1,
     'd+': date.getDate(),
     'h+': date.getHours(),
     'm+': date.getMinutes(),
     's+': date.getSeconds()
   }
-  for (const k in tt) {
+  for (const k in timedet) {
     if (new RegExp(`(${k})`).test(fmt)) {
-      const str: string = tt[k] + ''
+      const str: string = timedet[k] + ''
       fmt = fmt.replace(
         RegExp.$1,
         RegExp.$1.length === 1 ? str : padLeftZero(str)
