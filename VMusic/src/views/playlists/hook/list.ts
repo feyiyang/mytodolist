@@ -18,7 +18,6 @@ interface resInt {
   comments?: commentItem[]
 }
 
-// **Todo: 考虑函数式处理
 export function useDetails(lisType: 'playlist' | 'album') {
   const route = useRoute()
   const loading = ref<boolean>(true) // 信息加载
