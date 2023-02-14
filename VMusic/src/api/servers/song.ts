@@ -31,7 +31,7 @@ const song: apiInter = {
   },
   // 歌词
   lyric: {
-    url: '/lyric/new'
+    url: '/lyric'
   }
 }
 

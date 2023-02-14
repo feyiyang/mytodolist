@@ -172,6 +172,11 @@ const playMethods = ref<playMethod[]>([
     end() {
       setTimeout(() => {
         audioElem.value?.play()
+        if (!songInfo.value.playtime) {
+          songInfo.value.playtime = 0
+        } else {
+          songInfo.value.playtime++
+        }
       }, 500)
     }
   },
@@ -232,7 +237,7 @@ onMounted(() => {
     let onupdate = false
     audioElem.value.ontimeupdate = (event) => {
       // !onupdate && console.log(event)
-      slidebar.now = audioElem.value?.currentTime || 0
+      playsongs.now = slidebar.now = audioElem.value?.currentTime || 0
       if (sliderDrag) return
       slidebar.value = audioElem.value?.currentTime || 0
       onupdate = true
@@ -305,7 +310,6 @@ function endHandler() {
   mediaPlaying.value = false
   status.value = 'ended'
   playMethods.value[howplay.value].end()
-  console.log(howplay.value)
 }
 function errorHandler() {
   console.warn('Media is Error')

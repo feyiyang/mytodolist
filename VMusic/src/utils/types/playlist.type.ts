@@ -34,6 +34,7 @@ export interface audioItem {
   al?: any // 专辑封面， 名字
   ar?: any // 歌手
   lyric?: any // 歌词
+  playtime?: number
 }
 
 export interface commentItem {

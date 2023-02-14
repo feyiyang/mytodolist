@@ -117,15 +117,17 @@ interface playerInt {
   current: audioItem & object
   playing: boolean
   lyric: any
+  now: string | number
 }
 const mainPlayer = reactive<playerInt>({
   list: [],
   current: Object.create(null),
   playing: false,
-  lyric: {}
+  lyric: {},
+  now: ''
 })
 const playerWatchStops: { [key: string]: () => void } = Object.create(null)
-const onInterface = ref<boolean>(false) // 播放 全屏
+const onInterface = ref<boolean>(false) // 播放 展开
 export function usePlayer(): {
   player: playerInt
   playerSubs: (
