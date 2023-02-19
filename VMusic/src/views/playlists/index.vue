@@ -276,7 +276,7 @@ function pageChg(n: number) {
 }
 function playSongHandler(n?: number): void {
   playsongs.list = songs.value
-  playsongs.current = { queueIndex: n, ...songs.value[n || 0] }
+  playsongs.current = { queueIndex: n || 0, ...songs.value[n || 0] }
   playsongs.playing = true
 }
 </script>

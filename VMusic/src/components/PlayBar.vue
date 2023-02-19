@@ -74,8 +74,10 @@
     />
   </div>
   <audio
+    id="main_audio"
     ref="audioElem"
     :src="mediaInfo?.url"
+    crossorigin="anonymous"
     @ended="endHandler"
     @loadstart="mediaPlaying = false"
     @error="errorHandler"
@@ -120,19 +122,26 @@
       <icon-list class="ico_list" @click.stop="drawVisible = !drawVisible" />
     </template>
   </a-drawer>
+
+  <PlayFace
+    v-if="onInterface"
+    :audioCtx="audioCtx"
+    :analyserNode="analyserNode"
+  />
 </template>
 <script setup lang="ts">
 import { ref, toRefs, reactive, onMounted, onUnmounted } from 'vue'
 import { Message, Icon } from '@arco-design/web-vue'
+import PlayFace from './Modals/PlayFace.vue'
 import { usePlayer } from '@/utils/hooks'
 import { audioItem, playMethod } from '@/utils/types/playlist.type'
 import { songApi } from '@/api'
 import { longFmt } from '@/utils/index'
 import emptyImg from '@/assets/img/emty_default.svg'
 
-const audioElem = ref<HTMLAudioElement>()
+const audioElem = ref<HTMLMediaElement>()
 const IconFont = Icon.addFromIconFontCn({
-  src: 'https://at.alicdn.com/t/c/font_1640412_tq822srt1bg.js'
+  src: 'https://at.alicdn.com/t/c/font_1640412_a1g460m24t.js'
 })
 const { player: playsongs, playerSubs, onInterface } = usePlayer()
 const {
@@ -185,8 +194,7 @@ const playMethods = ref<playMethod[]>([
     icon: 'icon-repeatall',
     type: 4,
     end() {
-      // console.log('enddd', songInfo.value)
-      if (songInfo.value.queueIndex) {
+      if (typeof songInfo.value.queueIndex == 'number') {
         let ind = songInfo.value.queueIndex + 1
         if (ind > queue.value.length - 1) {
           ind = 0
@@ -206,8 +214,12 @@ const slidebar = reactive({
 let sliderDrag = false
 let playSubStop: any
 
+const AudioContext = window.AudioContext
+const audioCtx = ref<AudioContext>(new AudioContext())
+const analyserNode = ref<AnalyserNode>()
 onMounted(() => {
   let getTimer: any = null
+
   audioElem.value?.pause()
   onPlay.value = false
   playSubStop = playerSubs('current', (val) => {
@@ -224,7 +236,18 @@ onMounted(() => {
     getMedia()
   }
   if (audioElem.value) {
-    audioElem.value.oncanplay = () => {
+    // load some sound
+    // const audioElement = document.querySelector('audio') as HTMLMediaElement
+    analyserNode.value = new AnalyserNode(audioCtx.value)
+    analyserNode.value.fftSize = 2048
+    const gainNode = audioCtx.value.createGain()
+    const track = audioCtx.value.createMediaElementSource(audioElem.value)
+    track
+      .connect(analyserNode.value)
+      .connect(gainNode)
+      .connect(audioCtx.value.destination)
+    audioElem.value.oncanplaythrough = () => {
+      audioCtx.value.resume()
       audioElem.value?.play()
       onPlay.value = true
     }
@@ -288,7 +311,7 @@ function playChgHandler() {
   onPlay.value = !onPlay.value
 }
 function playingNext() {
-  if (songInfo.value.queueIndex) {
+  if (typeof songInfo.value.queueIndex == 'number') {
     let ind = songInfo.value.queueIndex + 1
     if (ind > queue.value.length - 1) {
       ind = 0
@@ -410,6 +433,7 @@ function clearList() {
   }
   .name {
     padding-bottom: 5px;
+    max-width: 90%;
   }
   .er {
     font-size: 12px;
