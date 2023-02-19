@@ -127,6 +127,7 @@
     v-if="onInterface"
     :audioCtx="audioCtx"
     :analyserNode="analyserNode"
+    @volChange="volChange"
   />
 </template>
 <script setup lang="ts">
@@ -217,6 +218,7 @@ let playSubStop: any
 const AudioContext = window.AudioContext
 const audioCtx = ref<AudioContext>(new AudioContext())
 const analyserNode = ref<AnalyserNode>()
+const gainNode = ref<GainNode>()
 onMounted(() => {
   let getTimer: any = null
 
@@ -240,11 +242,11 @@ onMounted(() => {
     // const audioElement = document.querySelector('audio') as HTMLMediaElement
     analyserNode.value = new AnalyserNode(audioCtx.value)
     analyserNode.value.fftSize = 2048
-    const gainNode = audioCtx.value.createGain()
+    gainNode.value = audioCtx.value.createGain()
     const track = audioCtx.value.createMediaElementSource(audioElem.value)
     track
       .connect(analyserNode.value)
-      .connect(gainNode)
+      .connect(gainNode.value)
       .connect(audioCtx.value.destination)
     audioElem.value.oncanplaythrough = () => {
       audioCtx.value.resume()
@@ -360,6 +362,9 @@ function clearList() {
   queue.value = []
   songInfo.value = Object(null)
   onPlay.value = false
+}
+function volChange(val: number) {
+  gainNode.value?.gain.setValueAtTime(val, audioCtx.value.currentTime)
 }
 </script>
 <style lang="scss" scoped>
