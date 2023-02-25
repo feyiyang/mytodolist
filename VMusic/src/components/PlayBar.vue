@@ -61,6 +61,7 @@
       <span class="duration" v-if="audioElem && songInfo">
         {{ longFmt(slidebar.now, 's') }} / {{ longFmt(slidebar.duration, 's') }}
       </span>
+      <span class="ly">词</span>
       <span class="list" @click.stop="drawVisible = !drawVisible">
         <icon-font class="ico_list" type="icon-gedan" />{{ queue.length }}
       </span>
@@ -400,12 +401,15 @@ function volChange(val: number) {
     padding-right: 30px;
     font-size: 12px;
     color: #999;
+    .ly {
+      margin: 0 8px;
+    }
     .list {
       // display: flex;
       // align-items: center;
-      margin-left: 8px;
+      // margin-left: 8px;
       .ico_list {
-        vertical-align: -6px;
+        vertical-align: -5px;
         color: #999;
       }
     }

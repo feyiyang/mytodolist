@@ -26,7 +26,7 @@ export function dateFormat(date: Date, fmt: string): string {
       (date.getFullYear() + '').substr(4 - RegExp.$1.length)
     )
   }
-  const timedet: {[key: string]: number} = {
+  const timedet: { [key: string]: number } = {
     'M+': date.getMonth() + 1,
     'd+': date.getDate(),
     'h+': date.getHours(),

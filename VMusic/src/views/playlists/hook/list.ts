@@ -129,7 +129,6 @@ export function useDetails(lisType: 'playlist' | 'album') {
       albumApi
         .comment({ id: route.params.id, limit: commentSize.value })
         .then((res: resInt) => {
-          console.log(res)
           if (res.code === 200) {
             comments.hot = res.hotComments as commentItem[]
             comments.new = res.comments as commentItem[]

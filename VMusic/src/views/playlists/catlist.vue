@@ -51,7 +51,7 @@
             <icon-play-circle-fill class="playicon" />
           </span>
         </div>
-        <p class="description">{{ item.name }}</p>
+        <p class="description" @click="golist(item)">{{ item.name }}</p>
         <p class="extra">{{ item?.creator?.nickname }}</p>
       </div>
     </div>

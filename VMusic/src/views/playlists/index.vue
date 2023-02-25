@@ -100,6 +100,9 @@
                     </span>
                   </span>
                   <span class="fee" v-if="song.fee == 1"> VIP </span>
+                  <span class="add" title="下一首播" @click="addNext(song)"
+                    >+</span
+                  >
                 </a-col>
                 <a-col class="songers" :span="5">
                   <template v-for="(ar, ind) in song.ar" :key="ind">
@@ -221,6 +224,7 @@
 import { onBeforeMount, ref, computed, toRefs, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { type ScrollbarInstance } from '@arco-design/web-vue'
+import { audioItem } from '@/utils/types/playlist.type'
 import { useDetails } from './hook/list'
 import { usePlayer } from '@/utils/hooks'
 import { longFmt } from '@/utils'
@@ -278,6 +282,17 @@ function playSongHandler(n?: number): void {
   playsongs.list = songs.value
   playsongs.current = { queueIndex: n || 0, ...songs.value[n || 0] }
   playsongs.playing = true
+}
+function addNext(song: audioItem) {
+  if (playsongs.current.queueIndex === undefined) {
+    playsongs.list = [song]
+    playsongs.current = { queueIndex: 0, ...song }
+    playsongs.playing = true
+  } else if (playsongs.current.queueIndex + 1 >= playsongs.list.length) {
+    playsongs.list.push(song)
+  } else {
+    playsongs.list.splice(playsongs.current.queueIndex + 1, 0, song)
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -362,6 +377,9 @@ function playSongHandler(n?: number): void {
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    &:hover .add {
+      display: block;
+    }
     :deep(.arco-list-item-main) {
       width: 100%;
       .arco-col {
@@ -373,6 +391,7 @@ function playSongHandler(n?: number): void {
     }
   }
   .names {
+    position: relative;
     overflow: hidden;
     text-overflow: ellipsis;
     > * {
@@ -402,6 +421,19 @@ function playSongHandler(n?: number): void {
     color: $somegreen;
     border: 1px $somegreen solid;
     border-radius: 4px;
+  }
+  .add {
+    display: none;
+    position: absolute;
+    right: 8px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    text-align: center;
+    line-height: 12px;
+    color: #bbb;
+    border: 1px #ccc solid;
+    cursor: pointer;
   }
   .play_arrow {
     cursor: pointer;

@@ -2,9 +2,17 @@
   <div class="interface" v-if="onInterface">
     <span class="close" @click="onInterface = false">收起</span>
     <div class="cover">
-      <a-image class="img" :src="player.current?.al?.picUrl"></a-image>
+      <a-image
+        class="img"
+        :src="player.current?.al?.picUrl + '?param=600y600'"
+      ></a-image>
       <canvas id="oscilloscope"></canvas>
-      <section class="controls-main">
+      <section
+        class="controls-main"
+        :style="{
+          backgroundImage: `url(${player.current?.al?.picUrl}?param=300y400)`
+        }"
+      >
         <span class="vol_wrap">
           <icon-font class="icon-yinliang-" type="icon-yinliang-" />
           <input
@@ -180,13 +188,15 @@ function change(evt: any) {
   .cover {
     width: 288px;
     position: relative;
+    border-radius: 2px 2px 0 0;
   }
   .lyric {
     width: 55%;
     height: 90%;
     overflow-y: auto;
     white-space: pre-line;
-    line-height: 1.4;
+    font-size: 15px;
+    line-height: 1.2;
     p {
       padding: 10px 0;
       &.active {
@@ -209,7 +219,24 @@ function change(evt: any) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: rgba(220, 220, 220, 0.45);
+  border-radius: 0 0 2px 2px;
+  background-position: 0 0;
+  background-size: 1800px auto;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(150, 150, 160, 0.3);
+    backdrop-filter: blur(4px);
+  }
+  .vol_wrap {
+    position: relative;
+    z-index: 2;
+  }
   .icon-yinliang- {
     display: inline-block;
     vertical-align: middle;
@@ -219,6 +246,8 @@ function change(evt: any) {
   }
 }
 #playBtn {
+  position: relative;
+  z-index: 1;
   appearance: none;
   width: 26px;
   height: 26px;

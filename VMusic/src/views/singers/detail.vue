@@ -72,24 +72,32 @@
           </ul>
         </a-tab-pane>
         <a-tab-pane :key="1" title="专辑">
-          <ul class="als">
+          <p class="ctr">
+            <span
+              class="styles"
+              v-if="alStyle == 'normal'"
+              @click="chgStyle('folder')"
+              >|||</span
+            >
+            <span class="styles" v-else @click="chgStyle('normal')">■■■■</span>
+          </p>
+          <ul :class="['als', alStyle]">
             <li
               class="al"
               v-for="(al, index) in albums"
               :key="index"
               @click="goAl(al)"
             >
-              <span class="cover">
-                <a-image
-                  class="img"
-                  :src="al.picUrl + '?param=300y300'"
-                  :preview="false"
-                ></a-image>
-              </span>
-              <p class="name">{{ al.name }}</p>
-              <p class="pub_time">
-                {{ dateFormat(new Date(al.publishTime), 'yy-MM-dd') }}
-              </p>
+              <div
+                class="cover"
+                :style="{ backgroundImage: `url(${al.picUrl}?param=300y300)` }"
+              ></div>
+              <div class="infos">
+                <p class="name">{{ al.name }}</p>
+                <p class="pub_time">
+                  {{ dateFormat(new Date(al.publishTime), 'yy-MM-dd') }}
+                </p>
+              </div>
             </li>
           </ul>
         </a-tab-pane>
@@ -101,6 +109,7 @@
                   class="img"
                   :src="mv.imgurl + '?param=260y195'"
                   :alt="mv.name"
+                  :preview="false"
                 ></a-image>
                 <span class="count"><icon-play-arrow />{{ mv.playCount }}</span>
                 <span class="long">{{ longFmt(mv.duration) }}</span>
@@ -153,6 +162,7 @@ const albums = ref<any[]>([])
 const mvs = ref<any[]>([])
 const curPage = ref<number>(0)
 let hasMore = false
+const alStyle = ref<string>('normal')
 
 onBeforeMount(async () => {
   await singerApi
@@ -242,6 +252,9 @@ function goAl(al: any): void {
     path: `/playlists/${al.id}`,
     query: { type: 'album' }
   })
+}
+function chgStyle(st = 'normal') {
+  alStyle.value = st
 }
 </script>
 <style lang="scss" scoped>
@@ -338,14 +351,20 @@ function goAl(al: any): void {
   flex-wrap: wrap;
   padding-top: 10px;
   .al {
-    width: calc(25% - 15px);
+    width: 176px;
+    height: 220px;
     margin: 0 20px 20px 0;
+    overflow: hidden;
     font-size: 12px;
+    // transition: all 0.4s linear;
     &:nth-of-type(4n) {
       margin: 0;
     }
     .cover {
       display: block;
+      width: 176px;
+      height: 176px;
+      background-size: cover;
       transition: all 0.2s ease-in-out;
       cursor: pointer;
       &:hover {
@@ -368,6 +387,93 @@ function goAl(al: any): void {
     .pub_time {
       color: $textlight;
     }
+  }
+  &.folder {
+    .al {
+      position: relative;
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
+      width: 76px;
+      height: 276px;
+      margin: 0 10px 10px 0;
+      overflow: hidden;
+      border-radius: 4px;
+      &:nth-of-type(9n) {
+        margin-right: 0;
+      }
+      .cover {
+        height: 264px;
+        margin-top: 5px;
+        background-position: 15% center;
+        .img {
+          height: 170px;
+          border-radius: 0;
+          :deep(img) {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+      &:hover .cover {
+        background-position: 120% center;
+      }
+      .infos {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: column-reverse;
+        justify-content: space-between;
+        align-items: flex-end;
+        overflow: hidden;
+        border-radius: 4px;
+        box-shadow: inset 0 0 2px 4px rgba(200, 205, 208, 0.85);
+      }
+      p {
+        width: 2.6em;
+        padding: 2px;
+        border-radius: 2px;
+        color: #000;
+        text-align: center;
+        letter-spacing: 1px;
+        &.name {
+          margin: 4px 2px;
+          font-size: 14px;
+          transform: scale(0.85);
+          background-color: rgba(220, 222, 222, 0.6);
+          backdrop-filter: blur(2px);
+        }
+        &.pub_time {
+          width: auto;
+          margin: 0;
+          align-self: flex-start;
+          transform: scale(0.85);
+          background-color: rgba(220, 222, 222, 0.5);
+          word-break: break-word;
+          font-size: 10px;
+          // backdrop-filter: blur(2px);
+        }
+      }
+    }
+  }
+}
+.ctr {
+  margin-top: -10px;
+  display: block;
+  text-align: right;
+  .styles {
+    margin-top: -16px;
+    display: inline-block;
+    width: 26px;
+    height: 22px;
+    overflow: hidden;
+    word-break: break-all;
+    color: $bgrey;
+    letter-spacing: 4px;
+    cursor: pointer;
   }
 }
 .mvs {
