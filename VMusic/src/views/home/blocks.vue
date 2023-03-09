@@ -63,7 +63,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onBeforeMount } from 'vue'
 import { homeApi } from '@/api'
 import HomeBlock from '@/components/HomeSlider/index.vue'
 // const homeBlocks = ref<any[]>([])
@@ -91,7 +91,8 @@ const djs = ref<any[]>([])
 const mvlist = ref<any[]>([])
 const newsong = ref<any[]>([])
 
-onMounted(async () => {
+onBeforeMount(async () => {
+  if (banners.value.length && newsong.value.length) return
   await homeApi.banner().then((res: any) => {
     banners.value = res.banners
   })

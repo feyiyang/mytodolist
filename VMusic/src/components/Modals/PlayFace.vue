@@ -189,6 +189,9 @@ function change(evt: any) {
     width: 288px;
     position: relative;
     border-radius: 2px 2px 0 0;
+    .img {
+      height: 288px;
+    }
   }
   .lyric {
     width: 55%;

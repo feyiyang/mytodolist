@@ -18,12 +18,16 @@
         <a-tab-pane v-for="(item, key) of tabs" :key="key" :title="item.name">
         </a-tab-pane>
       </a-tabs>
-      <router-view></router-view>
+      <router-view v-slot="{ Component, route }">
+        <keep-alive>
+          <component :is="Component" :key="route.path"></component>
+        </keep-alive>
+      </router-view>
     </div>
   </a-scrollbar>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onActivated } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -36,6 +40,10 @@ const tabs = reactive<{ [key: string]: { alias?: string[]; name: string } }>({
   '/catlist': { name: '分类歌单' }
 })
 const activeKey = ref<string>(tabs[route.path] ? route.path : '')
+
+onActivated(() => {
+  activeKey.value = route.path
+})
 
 function tabChg(key: string | number) {
   router.push(key as string)

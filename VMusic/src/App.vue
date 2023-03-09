@@ -3,7 +3,11 @@
   <div id="main">
     <TopBar />
     <div class="contain">
-      <router-view></router-view>
+      <router-view v-slot="{ Component, route }">
+        <keep-alive>
+          <component :is="Component" :key="route.path"></component>
+        </keep-alive>
+      </router-view>
     </div>
     <PlayBar />
   </div>
