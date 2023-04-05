@@ -38,6 +38,7 @@ import { useRouter } from 'vue-router'
 import { type Options } from '@splidejs/splide'
 import { countFormat } from '@/utils'
 import { usePlayer } from '@/utils/hooks'
+import { mvsApi } from '@/api'
 type listItem = {
   id: number
   picUrl?: string
@@ -76,6 +77,13 @@ const typeEnums: {
       queue.value = [song]
       songInfo.value = song
     }
+  },
+  mv(item) {
+    mvsApi.detail({ id: item.id }).then((res: any) => {
+      if (res.code === 200) {
+        window.open(res.url)
+      }
+    })
   }
 }
 

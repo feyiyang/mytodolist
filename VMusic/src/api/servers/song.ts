@@ -121,8 +121,15 @@ const album = {
   }
 }
 
+const mvs = {
+  detail: {
+    url: '/mv/url'
+  }
+}
+
 export const searchApi = apiFunc(search)
 export const songApi = apiFunc(song)
 export const songsApi = apiFunc(songs)
 export const singerApi = apiFunc(singer)
 export const albumApi = apiFunc(album)
+export const mvsApi = apiFunc(mvs)

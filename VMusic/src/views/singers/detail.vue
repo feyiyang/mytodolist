@@ -104,7 +104,7 @@
         <a-tab-pane :key="2" title="MV">
           <ul class="mvs">
             <li class="mv_item" v-for="(mv, index) in mvs" :key="index">
-              <div class="cover">
+              <div class="cover" @click="seeMv(mv)">
                 <a-image
                   class="img"
                   :src="mv.imgurl + '?param=260y195'"
@@ -129,7 +129,7 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
-import { singerApi } from '@/api'
+import { singerApi, mvsApi } from '@/api'
 import { useMainScroll, usePlayer } from '@/utils/hooks'
 import { longFmt, dateFormat } from '@/utils'
 import router from '@/router'
@@ -255,6 +255,13 @@ function goAl(al: any): void {
 }
 function chgStyle(st = 'normal') {
   alStyle.value = st
+}
+function seeMv(mv: any) {
+  mvsApi.detail({ id: mv.id }).then((res: any) => {
+    if (res.code === 200) {
+      window.open(res.url)
+    }
+  })
 }
 </script>
 <style lang="scss" scoped>
