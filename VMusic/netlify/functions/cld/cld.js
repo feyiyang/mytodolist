@@ -9,7 +9,7 @@ exports.handler = function(event, context, callback) {
     let { queryPath : qpath, ...queryData} = event.httpMethod === 'GET' ? event.queryStringParameters : {}
     console.log(queryPath + `?${querystring.stringify(queryData) + '&'}_t=${Date.now()}`)
     const options = {
-      hostname: 'service-34dor084-1253457920.gz.apigw.tencentcs.com',
+      hostname: 'service-acvb5yn4-1253457920.nj.tencentapigw.com',
       path: '/release' + queryPath + `?_t=${Date.now()}&${querystring.stringify(queryData)}`,
       method: event.httpMethod,
       headers: {
